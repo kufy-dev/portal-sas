@@ -4,7 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kisi-Kisi &amp; Kartu Soal PAS</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Lightweight mock of elementSdk so the page runs standalone
+        // (useful for GitHub Pages where /_sdk/* is not available)
+        if (!window.elementSdk) {
+            window.elementSdk = {
+                config: {},
+                _opts: null,
+                async init(opts) {
+                    this._opts = opts || {};
+                    this.config = Object.assign({}, opts && opts.defaultConfig ? opts.defaultConfig : {});
+                    if (this._opts && typeof this._opts.onConfigChange === 'function') {
+                        try { this._opts.onConfigChange(this.config); } catch (e) { console.error(e); }
+                    }
+                    return Promise.resolve(this.config);
+                },
+                setConfig(changes) {
+                    this.config = Object.assign({}, this.config, changes || {});
+                    if (this._opts && typeof this._opts.onConfigChange === 'function') {
+                        try { this._opts.onConfigChange(this.config); } catch (e) { console.error(e); }
+                    }
+                }
+            };
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
   <style>
         body {
             box-sizing: border-box;
@@ -130,26 +154,83 @@
             margin: 8px 0;
             padding-left: 20px;
         }
+            /* GTK-like navbar and hero */
+            .gtk-navbar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                padding: 14px 20px;
+                background: linear-gradient(90deg,#0b63d6 0%, #0b84e6 100%);
+                color: white;
+                border-radius: 10px;
+            }
+
+            .gtk-navbar .brand {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-weight: 700;
+                font-size: 18px;
+            }
+
+            .gtk-navbar .nav-links {
+                display: flex;
+                gap: 12px;
+            }
+
+            .gtk-navbar .nav-links a {
+                color: rgba(255,255,255,0.95);
+                text-decoration: none;
+                font-weight: 600;
+                padding: 8px 12px;
+                border-radius: 6px;
+            }
+
+            .gtk-navbar .nav-links a:hover { background: rgba(255,255,255,0.08); }
+
+            .gtk-hero {
+                margin-top: 18px;
+                padding: 22px;
+                border-radius: 10px;
+                background: linear-gradient(180deg, rgba(11,99,214,0.08), rgba(11,99,214,0.02));
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+            }
+
+            .gtk-hero .hero-text {
+                font-weight: 700;
+                color: #03254f;
+            }
+
+            .gtk-hero .hero-sub {
+                color: #07407a;
+                margin-top: 6px;
+                font-weight: 600;
+            }
     </style>
   <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+    <!-- Removed /_sdk/data_sdk.js for standalone use; mocked elementSdk above -->
  </head>
  <body class="w-full">
   <div id="app" class="w-full min-h-full"></div>
   <script>
         const defaultConfig = {
-            school_name: "SMK CENDIKIA RANCAKALONG",
-            teacher_name: "Lutfi Maulana, S.Tr.T., Gr.",
-            subject: "Desain Grafis",
-            class_grade: "X / 1 (Ganjil)",
-            exam_type: "Penilaian Akhir Semester (PAS)",
+            // Template default adapted for 'Ruang GTK' (Guru & Tenaga Kependidikan)
+            school_name: "SMKS CENDIKIA RANCAKALONG",
+            teacher_name: "Lutfi Maulana, S.Tr., Gr.",
+            subject: "Dasar Desain Grafis",
+            class_grade: "Kelas X",
+            exam_type: "Sumatif Akhir Semester",
             principal_name: "",
-            background_color: "#f8fafc",
+            // blue palette inspired by Kemendikdasmen TKA site
+            background_color: "#f4f7fd",
             card_color: "#ffffff",
-            primary_color: "#1e40af",
-            text_color: "#1e293b",
-            accent_color: "#059669",
+            primary_color: "#0b63d6",
+            text_color: "#072a6b",
+            accent_color: "#0b84e6",
             font_family: "Georgia",
             font_size: 14
         };
@@ -570,8 +651,75 @@
             }
         ];
 
-        function initApp() {
-            renderApp(defaultConfig);
+        async function initApp() {
+            await window.elementSdk.init({
+                defaultConfig,
+                onConfigChange: renderApp,
+                mapToCapabilities: (config) => ({
+                    recolorables: [
+                        {
+                            get: () => config.background_color || defaultConfig.background_color,
+                            set: (value) => {
+                                config.background_color = value;
+                                window.elementSdk.setConfig({ background_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.card_color || defaultConfig.card_color,
+                            set: (value) => {
+                                config.card_color = value;
+                                window.elementSdk.setConfig({ card_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.primary_color || defaultConfig.primary_color,
+                            set: (value) => {
+                                config.primary_color = value;
+                                window.elementSdk.setConfig({ primary_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.text_color || defaultConfig.text_color,
+                            set: (value) => {
+                                config.text_color = value;
+                                window.elementSdk.setConfig({ text_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.accent_color || defaultConfig.accent_color,
+                            set: (value) => {
+                                config.accent_color = value;
+                                window.elementSdk.setConfig({ accent_color: value });
+                            }
+                        }
+                    ],
+                    borderables: [],
+                    fontEditable: {
+                        get: () => config.font_family || defaultConfig.font_family,
+                        set: (value) => {
+                            config.font_family = value;
+                            window.elementSdk.setConfig({ font_family: value });
+                        }
+                    },
+                    fontSizeable: {
+                        get: () => config.font_size || defaultConfig.font_size,
+                        set: (value) => {
+                            config.font_size = value;
+                            window.elementSdk.setConfig({ font_size: value });
+                        }
+                    }
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ["school_name", config.school_name || defaultConfig.school_name],
+                    ["teacher_name", config.teacher_name || defaultConfig.teacher_name],
+                    ["subject", config.subject || defaultConfig.subject],
+                    ["class_grade", config.class_grade || defaultConfig.class_grade],
+                    ["exam_type", config.exam_type || defaultConfig.exam_type],
+                    ["principal_name", config.principal_name || defaultConfig.principal_name]
+                ])
+            });
+
+            renderApp(window.elementSdk.config);
         }
 
         function renderApp(config) {
@@ -594,28 +742,48 @@
 
             app.innerHTML = `
                 <div class="w-full max-w-7xl mx-auto">
-                    <!-- Control Panel -->
-                    <div class="no-print mb-6 p-6 rounded-lg shadow-lg" style="background: ${cardColor};">
-                        <div class="flex justify-between items-center flex-wrap gap-4">
-                            <div>
-                                <h1 class="font-bold mb-2" style="font-size: ${baseSize * 1.8}px; color: ${primaryColor};">
-                                    📋 Kisi-Kisi & Kartu Soal
-                                </h1>
-                                <p style="font-size: ${baseSize * 0.95}px; color: ${textColor};">
-                                    ${config.subject || defaultConfig.subject} - ${config.class_grade || defaultConfig.class_grade}
-                                </p>
+                    <!-- Control Panel (GTK-like navbar + hero) -->
+                    <div class="no-print mb-6">
+                        <div class="gtk-navbar">
+                            <div class="brand">
+                                <div style="width:40px;height:40px;border-radius:8px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-weight:800;">GTK</div>
+                                <div>
+                                    <div style="font-size:16px;">Ruang GTK</div>
+                                    <div style="font-size:12px;opacity:0.9">Dashboard</div>
+                                </div>
                             </div>
-                            <button 
-                                id="printBtn"
-                                class="px-6 py-3 rounded-lg font-semibold shadow-md transition hover:shadow-lg"
-                                style="background: ${accentColor}; color: white; font-size: ${baseSize}px;"
-                            >
-                                🖨️ Cetak Dokumen
-                            </button>
+
+                            <div class="nav-links">
+                                <a href="#">Dashboard</a>
+                                <a href="#">Data GTK</a>
+                                <a href="#">Dokumen</a>
+                                <a href="#">Bantuan</a>
+                            </div>
+
+                            <div class="actions">
+                                <button 
+                                    id="printBtn"
+                                    class="px-4 py-2 rounded-md font-semibold"
+                                    style="background: white; color: ${primaryColor}; font-size: ${baseSize}px;"
+                                >
+                                    🖨️ Cetak
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="gtk-hero" style="background: ${cardColor};">
+                            <div>
+                                <div class="hero-text" style="font-size: ${baseSize * 1.2}px;">${config.school_name || defaultConfig.school_name}</div>
+                                <div class="hero-sub" style="font-size: ${baseSize * 0.95}px;">${config.subject || defaultConfig.subject} • ${config.class_grade || defaultConfig.class_grade}</div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-weight:700">${config.teacher_name || defaultConfig.teacher_name}</div>
+                                <div style="font-size:12px;color:${textColor}">Rancakalong, 03 Desember 2025</div>
+                            </div>
                         </div>
 
                         <!-- Tabs -->
-                        <div class="flex gap-2 mt-6 border-b" style="border-color: ${primaryColor}20;">
+                        <div class="flex gap-2 mt-4 border-b" style="border-color: ${primaryColor}20; padding-top:12px;">
                             <button 
                                 class="tab-button ${currentTab === 'kisi-kisi' ? 'active' : ''}"
                                 data-tab="kisi-kisi"
@@ -925,6 +1093,5 @@
 
         initApp();
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a8375fcc197fce7',t:'MTc2NDc2OTA2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a82f63906eaf892',t:'MTc2NDc2MzgzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-
