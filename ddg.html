@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kisi-Kisi &amp; Kartu Soal PAS</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            .print-container {
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+                background: white !important;
+            }
+
+            .page-break {
+                page-break-after: always;
+            }
+
+            body {
+                background: white !important;
+            }
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .tab-button.active {
+            border-bottom-color: currentColor;
+        }
+
+        .tab-button:hover {
+            opacity: 0.8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        table th {
+            background: #f3f4f6;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .signature-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 40px;
+        }
+
+        .signature-box {
+            flex: 1;
+            text-align: center;
+        }
+
+        .signature-space {
+            height: 80px;
+            margin: 10px 0;
+        }
+
+        .header-doc {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #000;
+        }
+
+        .doc-title {
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 10px 0;
+        }
+
+        .info-table {
+            margin-bottom: 20px;
+        }
+
+        .info-table td {
+            border: none;
+            padding: 4px 8px;
+        }
+
+        .kartu-soal-box {
+            border: 2px solid #000;
+            padding: 20px;
+            margin-bottom: 30px;
+            background: white;
+        }
+
+        .soal-content {
+            margin: 15px 0;
+            line-height: 1.8;
+        }
+
+        .option-item {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="w-full">
+  <div id="app" class="w-full min-h-full"></div>
+  <script>
+        const defaultConfig = {
+            school_name: "SMK CENDIKIA RANCAKALONG",
+            teacher_name: "Lutfi Maulana, S.Tr.T., Gr.",
+            subject: "Desain Grafis",
+            class_grade: "X / 1 (Ganjil)",
+            exam_type: "Penilaian Akhir Semester (PAS)",
+            principal_name: "",
+            background_color: "#f8fafc",
+            card_color: "#ffffff",
+            primary_color: "#1e40af",
+            text_color: "#1e293b",
+            accent_color: "#059669",
+            font_family: "Georgia",
+            font_size: 14
+        };
+
+        let currentTab = 'kisi-kisi';
+
+        const kisiKisiData = [
+            { no: 1, kd: "3.1", materi: "Konsep dasar desain grafis", indikator: "Menjelaskan pengertian desain grafis", bentuk: "PG", nomor: "1", level: "C1" },
+            { no: 2, kd: "3.1", materi: "Software desain grafis", indikator: "Mengidentifikasi software desain vektor", bentuk: "PG", nomor: "2", level: "C2" },
+            { no: 3, kd: "3.2", materi: "Sistem warna digital", indikator: "Menjelaskan sistem warna RGB", bentuk: "PG", nomor: "3", level: "C1" },
+            { no: 4, kd: "3.2", materi: "Sistem warna cetak", indikator: "Menjelaskan sistem warna CMYK", bentuk: "PG", nomor: "4", level: "C2" },
+            { no: 5, kd: "3.3", materi: "Resolusi gambar", indikator: "Menentukan resolusi ideal untuk cetak", bentuk: "PG", nomor: "5", level: "C2" },
+            { no: 6, kd: "3.3", materi: "Format file grafis", indikator: "Mengidentifikasi format file dengan transparansi", bentuk: "PG", nomor: "6", level: "C2" },
+            { no: 7, kd: "3.4", materi: "Prinsip desain - Balance", indikator: "Menerapkan prinsip keseimbangan visual", bentuk: "PG", nomor: "7", level: "C3" },
+            { no: 8, kd: "3.5", materi: "Tools Photoshop", indikator: "Menggunakan tool untuk menghapus background", bentuk: "PG", nomor: "8", level: "C3" },
+            { no: 9, kd: "3.6", materi: "Tipografi - jenis font", indikator: "Mengklasifikasikan jenis font serif", bentuk: "PG", nomor: "9", level: "C2" },
+            { no: 10, kd: "3.7", materi: "Prinsip desain - White space", indikator: "Menganalisis fungsi white space", bentuk: "PG", nomor: "10", level: "C4" },
+            { no: 11, kd: "3.7", materi: "Teori warna - Kontras", indikator: "Mengevaluasi kontras warna untuk keterbacaan", bentuk: "PG", nomor: "11", level: "C4" },
+            { no: 12, kd: "3.8", materi: "Layout - Grid system", indikator: "Menerapkan grid system dalam layout", bentuk: "PG", nomor: "12", level: "C3" },
+            { no: 13, kd: "3.9", materi: "Desain logo - Wordmark", indikator: "Mengidentifikasi jenis logo wordmark", bentuk: "PG", nomor: "13", level: "C2" },
+            { no: 14, kd: "3.10", materi: "Tipografi - Hierarchy", indikator: "Menerapkan hierarki tipografi", bentuk: "PG", nomor: "14", level: "C3" },
+            { no: 15, kd: "3.11", materi: "Desain vektor - Bezier", indikator: "Memahami konsep bezier curve", bentuk: "PG", nomor: "15", level: "C2" },
+            { no: 16, kd: "3.12", materi: "Komposisi - Golden ratio", indikator: "Menjelaskan perbandingan golden ratio", bentuk: "PG", nomor: "16", level: "C1" },
+            { no: 17, kd: "3.13", materi: "Presentasi desain - Mockup", indikator: "Menggunakan mockup untuk presentasi", bentuk: "PG", nomor: "17", level: "C3" },
+            { no: 18, kd: "3.14", materi: "Layer management", indikator: "Menerapkan penggunaan layer", bentuk: "PG", nomor: "18", level: "C3" },
+            { no: 19, kd: "3.15", materi: "Prinsip desain - Alignment", indikator: "Mengevaluasi alignment dalam desain", bentuk: "PG", nomor: "19", level: "C4" },
+            { no: 20, kd: "3.16", materi: "Psikologi warna", indikator: "Menganalisis dampak psikologis warna merah", bentuk: "PG", nomor: "20", level: "C4" },
+            { no: 21, kd: "3.17", materi: "Resolusi - DPI/PPI", indikator: "Menjelaskan konsep DPI dan PPI", bentuk: "PG", nomor: "21", level: "C1" },
+            { no: 22, kd: "3.17", materi: "Image resolution", indikator: "Menentukan resolusi untuk web", bentuk: "PG", nomor: "22", level: "C2" },
+            { no: 23, kd: "3.18", materi: "Teori warna - Complementary", indikator: "Mengidentifikasi warna complementary", bentuk: "PG", nomor: "23", level: "C2" },
+            { no: 24, kd: "3.18", materi: "Color harmony", indikator: "Menerapkan skema warna analogous", bentuk: "PG", nomor: "24", level: "C3" },
+            { no: 25, kd: "3.18", materi: "Color wheel", indikator: "Memahami posisi warna dalam color wheel", bentuk: "PG", nomor: "25", level: "C2" },
+            { no: 26, kd: "3.19", materi: "Tipografi - Kerning", indikator: "Menjelaskan konsep kerning", bentuk: "PG", nomor: "26", level: "C2" },
+            { no: 27, kd: "3.19", materi: "Tipografi - Tracking", indikator: "Membedakan tracking dan kerning", bentuk: "PG", nomor: "27", level: "C2" },
+            { no: 28, kd: "3.19", materi: "Tipografi - Leading", indikator: "Menerapkan leading yang tepat", bentuk: "PG", nomor: "28", level: "C3" },
+            { no: 29, kd: "3.19", materi: "Font pairing", indikator: "Memilih kombinasi font yang harmonis", bentuk: "PG", nomor: "29", level: "C3" },
+            { no: 30, kd: "3.19", materi: "Readability", indikator: "Mengevaluasi keterbacaan tipografi", bentuk: "PG", nomor: "30", level: "C4" },
+            { no: 31, kd: "3.20", materi: "Raster vs Vektor", indikator: "Membedakan karakteristik raster dan vektor", bentuk: "PG", nomor: "31", level: "C2" },
+            { no: 32, kd: "3.20", materi: "Format JPEG", indikator: "Menjelaskan karakteristik format JPEG", bentuk: "PG", nomor: "32", level: "C1" },
+            { no: 33, kd: "3.20", materi: "Format PNG", indikator: "Mengidentifikasi kelebihan PNG", bentuk: "PG", nomor: "33", level: "C2" },
+            { no: 34, kd: "3.20", materi: "Format SVG", indikator: "Memahami kegunaan format SVG", bentuk: "PG", nomor: "34", level: "C2" },
+            { no: 35, kd: "3.20", materi: "Format GIF", indikator: "Menjelaskan fungsi format GIF", bentuk: "PG", nomor: "35", level: "C1" },
+            { no: 36, kd: "3.20", materi: "Kompresi gambar", indikator: "Menerapkan kompresi yang tepat", bentuk: "PG", nomor: "36", level: "C3" },
+            { no: 37, kd: "3.20", materi: "File optimization", indikator: "Mengoptimalkan file untuk web", bentuk: "PG", nomor: "37", level: "C3" },
+            { no: 38, kd: "3.20", materi: "Color mode", indikator: "Membedakan RGB dan CMYK", bentuk: "PG", nomor: "38", level: "C2" },
+            { no: 39, kd: "3.20", materi: "Aspect ratio", indikator: "Menghitung aspect ratio", bentuk: "PG", nomor: "39", level: "C3" },
+            { no: 40, kd: "3.20", materi: "Canvas size", indikator: "Menentukan ukuran canvas untuk berbagai media", bentuk: "PG", nomor: "40", level: "C4" },
+            { no: 41, kd: "4.1", materi: "Analisis desain grafis", indikator: "Menganalisis perbedaan vektor dan raster", bentuk: "Essay", nomor: "1", level: "C4" },
+            { no: 42, kd: "4.2", materi: "Prinsip desain", indikator: "Menjelaskan prinsip-prinsip desain", bentuk: "Essay", nomor: "2", level: "C2" },
+            { no: 43, kd: "4.3", materi: "Teori warna dalam desain", indikator: "Menganalisis pentingnya pemilihan warna", bentuk: "Essay", nomor: "3", level: "C4" },
+            { no: 44, kd: "4.4", materi: "Tipografi dalam desain", indikator: "Menjelaskan fungsi dan pemilihan font", bentuk: "Essay", nomor: "4", level: "C2" },
+            { no: 45, kd: "4.5", materi: "Workflow desain grafis", indikator: "Menjelaskan proses workflow desain", bentuk: "Essay", nomor: "5", level: "C2" }
+        ];
+
+        // Data lengkap 45 soal
+        const soalData = [
+            // Pilihan Ganda 1-40
+            { 
+                no: 1, kd: "3.1", materi: "Konsep dasar desain grafis", indikator: "Menjelaskan pengertian desain grafis",
+                level: "C1", bentuk: "PG",
+                soal: "Apa yang dimaksud dengan desain grafis?",
+                pilihan: ["Seni menggambar dengan pensil", "Proses komunikasi visual menggunakan elemen grafis", "Teknik membuat patung", "Cara menulis artikel", "Metode fotografi profesional"],
+                kunci: "B", pembahasan: "Desain grafis adalah proses komunikasi menggunakan elemen visual seperti tipografi, fotografi, dan ilustrasi untuk menyampaikan informasi atau pesan kepada audiens.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 15-20"
+            },
+            { 
+                no: 2, kd: "3.1", materi: "Software desain grafis", indikator: "Mengidentifikasi software desain vektor",
+                level: "C2", bentuk: "PG",
+                soal: "Software berikut yang digunakan untuk membuat desain grafis berbasis vektor adalah...",
+                pilihan: ["Adobe Photoshop", "Adobe Illustrator", "Corel Paint", "GIMP", "Paint Tool SAI"],
+                kunci: "B", pembahasan: "Adobe Illustrator adalah software berbasis vektor yang menggunakan matematika untuk membuat gambar, sehingga dapat diperbesar tanpa kehilangan kualitas.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 22-25"
+            },
+            { 
+                no: 3, kd: "3.2", materi: "Sistem warna digital", indikator: "Menjelaskan sistem warna RGB",
+                level: "C1", bentuk: "PG",
+                soal: "RGB adalah singkatan dari...",
+                pilihan: ["Red Green Blue", "Red Grey Black", "Right Green Blue", "Red Green Brown", "Real Green Blue"],
+                kunci: "A", pembahasan: "RGB adalah sistem warna aditif yang terdiri dari Red (merah), Green (hijau), dan Blue (biru), digunakan untuk tampilan digital seperti monitor dan TV.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 30-32"
+            },
+            { 
+                no: 4, kd: "3.2", materi: "Sistem warna cetak", indikator: "Menjelaskan sistem warna CMYK",
+                level: "C2", bentuk: "PG",
+                soal: "Sistem warna yang digunakan untuk proses cetak adalah...",
+                pilihan: ["RGB", "HSB", "CMYK", "LAB", "Grayscale"],
+                kunci: "C", pembahasan: "CMYK (Cyan, Magenta, Yellow, Key/Black) adalah sistem warna subtraktif yang digunakan dalam proses pencetakan atau printing.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 33-35"
+            },
+            { 
+                no: 5, kd: "3.3", materi: "Resolusi gambar", indikator: "Menentukan resolusi ideal untuk cetak",
+                level: "C2", bentuk: "PG",
+                soal: "Resolusi minimal yang disarankan untuk desain cetak berkualitas tinggi adalah...",
+                pilihan: ["72 dpi", "150 dpi", "300 dpi", "600 dpi", "1200 dpi"],
+                kunci: "C", pembahasan: "Resolusi 300 dpi (dots per inch) adalah standar industri untuk desain cetak berkualitas tinggi, memberikan hasil yang tajam dan detail.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 38-40"
+            },
+            { 
+                no: 6, kd: "3.3", materi: "Format file grafis", indikator: "Mengidentifikasi format file dengan transparansi",
+                level: "C2", bentuk: "PG",
+                soal: "Format file gambar yang mendukung transparansi adalah...",
+                pilihan: ["JPEG", "BMP", "PNG", "GIF dan PNG", "TIFF"],
+                kunci: "D", pembahasan: "Format PNG dan GIF mendukung transparansi (alpha channel), memungkinkan bagian gambar menjadi tembus pandang.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 42-45"
+            },
+            { 
+                no: 7, kd: "3.4", materi: "Prinsip desain - Balance", indikator: "Menerapkan prinsip keseimbangan visual",
+                level: "C3", bentuk: "PG",
+                soal: "Keseimbangan simetris dalam desain berarti...",
+                pilihan: ["Semua elemen berbeda ukuran", "Elemen disebarkan secara acak", "Elemen disusun sama di kedua sisi sumbu", "Menggunakan banyak warna", "Tidak ada aturan penataan"],
+                kunci: "C", pembahasan: "Keseimbangan simetris (formal balance) adalah susunan elemen yang sama atau mirip di kedua sisi garis sumbu tengah, menciptakan kesan formal dan stabil.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 48-52"
+            },
+            { 
+                no: 8, kd: "3.5", materi: "Tools Photoshop", indikator: "Menggunakan tool untuk menghapus background",
+                level: "C3", bentuk: "PG",
+                soal: "Tool di Photoshop yang digunakan untuk menghapus background secara otomatis adalah...",
+                pilihan: ["Brush Tool", "Magic Wand Tool", "Eraser Tool", "Clone Stamp Tool", "Blur Tool"],
+                kunci: "B", pembahasan: "Magic Wand Tool digunakan untuk menseleksi area dengan warna serupa, sangat efektif untuk menghapus background dengan warna solid.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 55-58"
+            },
+            { 
+                no: 9, kd: "3.6", materi: "Tipografi - jenis font", indikator: "Mengklasifikasikan jenis font serif",
+                level: "C2", bentuk: "PG",
+                soal: "Jenis font yang memiliki kait atau serif pada ujung hurufnya adalah...",
+                pilihan: ["Times New Roman", "Arial", "Helvetica", "Verdana", "Calibri"],
+                kunci: "A", pembahasan: "Times New Roman adalah contoh font serif yang memiliki kait (serif) di ujung huruf, memberikan kesan formal dan tradisional.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 60-63"
+            },
+            { 
+                no: 10, kd: "3.7", materi: "Prinsip desain - White space", indikator: "Menganalisis fungsi white space",
+                level: "C4", bentuk: "PG",
+                soal: "Fungsi utama white space dalam desain adalah...",
+                pilihan: ["Menghemat tinta cetak", "Memberikan ruang bernapas dan meningkatkan keterbacaan", "Mengisi area kosong", "Membuat desain lebih ramai", "Mengurangi biaya produksi"],
+                kunci: "B", pembahasan: "White space (negative space) memberikan ruang bernapas antara elemen, meningkatkan keterbacaan, fokus, dan kesan profesional pada desain.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 65-68"
+            },
+            { 
+                no: 11, kd: "3.7", materi: "Teori warna - Kontras", indikator: "Mengevaluasi kontras warna untuk keterbacaan",
+                level: "C4", bentuk: "PG",
+                soal: "Kombinasi warna yang memberikan kontras terbaik untuk keterbacaan teks adalah...",
+                pilihan: ["Kuning pada putih", "Hitam pada putih", "Abu-abu pada abu-abu muda", "Merah pada oranye", "Biru muda pada biru tua"],
+                kunci: "B", pembahasan: "Hitam pada putih memberikan kontras maksimal (rasio kontras tinggi), memudahkan mata membaca dan memenuhi standar aksesibilitas.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 70-72"
+            },
+            { 
+                no: 12, kd: "3.8", materi: "Layout - Grid system", indikator: "Menerapkan grid system dalam layout",
+                level: "C3", bentuk: "PG",
+                soal: "Grid system dalam desain digunakan untuk...",
+                pilihan: ["Membuat pola kotak-kotak", "Mengatur tata letak yang konsisten", "Menghias background", "Membuat efek 3D", "Mewarnai gambar"],
+                kunci: "B", pembahasan: "Grid system adalah kerangka panduan untuk mengatur penempatan elemen desain secara terstruktur dan konsisten, menciptakan hierarki visual yang baik.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 75-78"
+            },
+            { 
+                no: 13, kd: "3.9", materi: "Desain logo - Wordmark", indikator: "Mengidentifikasi jenis logo wordmark",
+                level: "C2", bentuk: "PG",
+                soal: "Logo yang hanya menggunakan teks/tulisan nama brand disebut...",
+                pilihan: ["Pictorial mark", "Abstract mark", "Wordmark", "Emblem", "Mascot"],
+                kunci: "C", pembahasan: "Wordmark (logotype) adalah jenis logo yang hanya terdiri dari teks atau tulisan nama brand dengan tipografi khusus, seperti Google atau Coca-Cola.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 80-83"
+            },
+            { 
+                no: 14, kd: "3.10", materi: "Tipografi - Hierarchy", indikator: "Menerapkan hierarki tipografi",
+                level: "C3", bentuk: "PG",
+                soal: "Dalam hierarki tipografi, elemen yang paling menonjol adalah...",
+                pilihan: ["Body text", "Caption", "Headline", "Footer", "Page number"],
+                kunci: "C", pembahasan: "Headline adalah elemen paling menonjol dalam hierarki tipografi, biasanya menggunakan ukuran font terbesar untuk menarik perhatian pertama kali.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 85-88"
+            },
+            { 
+                no: 15, kd: "3.11", materi: "Desain vektor - Bezier", indikator: "Memahami konsep bezier curve",
+                level: "C2", bentuk: "PG",
+                soal: "Bezier curve dalam desain vektor digunakan untuk...",
+                pilihan: ["Membuat garis lurus saja", "Membuat kurva dan bentuk smooth", "Menghapus objek", "Mewarnai background", "Mengatur transparansi"],
+                kunci: "B", pembahasan: "Bezier curve adalah kurva matematis yang menggunakan anchor points dan handles untuk membuat garis melengkung yang smooth dan presisi dalam desain vektor.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 90-93"
+            },
+            { 
+                no: 16, kd: "3.12", materi: "Komposisi - Golden ratio", indikator: "Menjelaskan perbandingan golden ratio",
+                level: "C1", bentuk: "PG",
+                soal: "Golden ratio dalam desain memiliki perbandingan sekitar...",
+                pilihan: ["1:1", "1:1.618", "1:2", "1:3", "2:3"],
+                kunci: "B", pembahasan: "Golden ratio (rasio emas) adalah perbandingan 1:1.618 atau phi (φ), yang dianggap proporsi paling harmonis dan estetis dalam alam dan desain.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 95-98"
+            },
+            { 
+                no: 17, kd: "3.13", materi: "Presentasi desain - Mockup", indikator: "Menggunakan mockup untuk presentasi",
+                level: "C3", bentuk: "PG",
+                soal: "Mockup dalam desain grafis berfungsi untuk...",
+                pilihan: ["Mengedit foto", "Menampilkan desain dalam konteks nyata", "Membuat animasi", "Menghapus background", "Mengatur warna"],
+                kunci: "B", pembahasan: "Mockup adalah template yang menampilkan desain dalam konteks penggunaan nyata (misalnya logo pada kaos, desain di smartphone) untuk presentasi yang lebih menarik.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 100-103"
+            },
+            { 
+                no: 18, kd: "3.14", materi: "Layer management", indikator: "Menerapkan penggunaan layer",
+                level: "C3", bentuk: "PG",
+                soal: "Keuntungan menggunakan layer dalam desain adalah...",
+                pilihan: ["File menjadi lebih besar", "Sulit mengedit", "Dapat mengedit elemen secara terpisah", "Tidak bisa dicetak", "Warna menjadi pudar"],
+                kunci: "C", pembahasan: "Layer memungkinkan desainer mengedit setiap elemen secara independen tanpa mempengaruhi elemen lain, memberikan fleksibilitas dan efisiensi dalam proses desain.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 105-108"
+            },
+            { 
+                no: 19, kd: "3.15", materi: "Prinsip desain - Alignment", indikator: "Mengevaluasi alignment dalam desain",
+                level: "C4", bentuk: "PG",
+                soal: "Alignment (perataan) yang baik dalam desain akan menghasilkan...",
+                pilihan: ["Desain terlihat berantakan", "Koneksi visual antar elemen yang jelas", "Warna lebih cerah", "File lebih kecil", "Proses lebih cepat"],
+                kunci: "B", pembahasan: "Alignment yang baik menciptakan koneksi visual antar elemen, membuat desain terlihat rapi, terorganisir, dan profesional dengan visual flow yang jelas.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 110-113"
+            },
+            { 
+                no: 20, kd: "3.16", materi: "Psikologi warna", indikator: "Menganalisis dampak psikologis warna merah",
+                level: "C4", bentuk: "PG",
+                soal: "Warna merah dalam psikologi warna sering diasosiasikan dengan...",
+                pilihan: ["Kesedihan dan duka", "Energi, passion, dan keberanian", "Kedamaian dan ketenangan", "Kesejukan dan segar", "Kemewahan dan elegan"],
+                kunci: "B", pembahasan: "Warna merah secara psikologis membangkitkan perasaan energi tinggi, passion, keberanian, bahkan urgensi dan bahaya, sering digunakan untuk call-to-action.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 115-118"
+            },
+            { 
+                no: 21, kd: "3.17", materi: "Resolusi - DPI/PPI", indikator: "Menjelaskan konsep DPI dan PPI",
+                level: "C1", bentuk: "PG",
+                soal: "DPI adalah singkatan dari...",
+                pilihan: ["Digital Print Image", "Dots Per Inch", "Design Print Index", "Digital Pixel Image", "Dots Pixel Inch"],
+                kunci: "B", pembahasan: "DPI (Dots Per Inch) adalah satuan pengukuran kepadatan titik dalam satu inci pada media cetak, menentukan ketajaman hasil cetak.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 120-122"
+            },
+            { 
+                no: 22, kd: "3.17", materi: "Image resolution", indikator: "Menentukan resolusi untuk web",
+                level: "C2", bentuk: "PG",
+                soal: "Resolusi yang umum digunakan untuk gambar web adalah...",
+                pilihan: ["300 dpi", "150 dpi", "72 dpi", "600 dpi", "1200 dpi"],
+                kunci: "C", pembahasan: "Resolusi 72 dpi sudah cukup untuk tampilan web/digital karena layar monitor umumnya hanya dapat menampilkan sekitar 72-96 ppi, file juga lebih ringan.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 123-125"
+            },
+            { 
+                no: 23, kd: "3.18", materi: "Teori warna - Complementary", indikator: "Mengidentifikasi warna complementary",
+                level: "C2", bentuk: "PG",
+                soal: "Warna complementary dari biru adalah...",
+                pilihan: ["Hijau", "Merah", "Oranye", "Ungu", "Kuning"],
+                kunci: "C", pembahasan: "Warna complementary adalah warna yang berseberangan di color wheel. Complementary dari biru adalah oranye, menciptakan kontras maksimal.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 127-130"
+            },
+            { 
+                no: 24, kd: "3.18", materi: "Color harmony", indikator: "Menerapkan skema warna analogous",
+                level: "C3", bentuk: "PG",
+                soal: "Skema warna analogous menggunakan warna yang...",
+                pilihan: ["Berseberangan di color wheel", "Berdekatan di color wheel", "Hitam dan putih saja", "Acak tanpa aturan", "Warna primer saja"],
+                kunci: "B", pembahasan: "Skema warna analogous menggunakan 3-5 warna yang berdekatan di color wheel, menciptakan harmoni yang lembut dan kohesif.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 131-133"
+            },
+            { 
+                no: 25, kd: "3.18", materi: "Color wheel", indikator: "Memahami posisi warna dalam color wheel",
+                level: "C2", bentuk: "PG",
+                soal: "Warna primer dalam color wheel adalah...",
+                pilihan: ["Merah, Kuning, Biru", "Merah, Hijau, Biru", "Cyan, Magenta, Yellow", "Oranye, Hijau, Ungu", "Hitam, Abu-abu, Putih"],
+                kunci: "A", pembahasan: "Warna primer tradisional adalah Merah, Kuning, dan Biru. Ketiga warna ini tidak dapat dibuat dari campuran warna lain dan menjadi dasar semua warna.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 134-136"
+            },
+            { 
+                no: 26, kd: "3.19", materi: "Tipografi - Kerning", indikator: "Menjelaskan konsep kerning",
+                level: "C2", bentuk: "PG",
+                soal: "Kerning dalam tipografi adalah...",
+                pilihan: ["Jarak antar baris", "Jarak antar dua huruf tertentu", "Ukuran font", "Jenis font", "Warna teks"],
+                kunci: "B", pembahasan: "Kerning adalah pengaturan jarak spasi antara dua huruf tertentu untuk mencapai visual yang lebih seimbang dan proporsional.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 138-140"
+            },
+            { 
+                no: 27, kd: "3.19", materi: "Tipografi - Tracking", indikator: "Membedakan tracking dan kerning",
+                level: "C2", bentuk: "PG",
+                soal: "Perbedaan tracking dan kerning adalah...",
+                pilihan: ["Tidak ada perbedaan", "Tracking untuk semua huruf, kerning untuk pasangan huruf tertentu", "Tracking untuk warna, kerning untuk ukuran", "Tracking untuk cetak, kerning untuk digital", "Tracking lebih mahal dari kerning"],
+                kunci: "B", pembahasan: "Tracking mengatur jarak uniform untuk semua huruf dalam teks, sedangkan kerning mengatur jarak spesifik antara pasangan huruf tertentu.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 141-143"
+            },
+            { 
+                no: 28, kd: "3.19", materi: "Tipografi - Leading", indikator: "Menerapkan leading yang tepat",
+                level: "C3", bentuk: "PG",
+                soal: "Leading dalam tipografi mengatur...",
+                pilihan: ["Jarak antar huruf", "Jarak antar kata", "Jarak antar baris", "Ukuran huruf", "Tebal huruf"],
+                kunci: "C", pembahasan: "Leading (line spacing) adalah jarak vertikal antara baseline satu baris teks dengan baris berikutnya, mempengaruhi keterbacaan teks.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 144-146"
+            },
+            { 
+                no: 29, kd: "3.19", materi: "Font pairing", indikator: "Memilih kombinasi font yang harmonis",
+                level: "C3", bentuk: "PG",
+                soal: "Prinsip dasar font pairing yang baik adalah...",
+                pilihan: ["Menggunakan 10 font berbeda", "Memilih font yang sama persis", "Mengombinasikan font yang kontras tapi harmonis", "Semua font harus serif", "Menggunakan warna berbeda saja"],
+                kunci: "C", pembahasan: "Font pairing yang baik mengombinasikan font dengan kontras yang jelas (misal serif dengan sans-serif) namun tetap harmonis dan saling melengkapi.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 147-150"
+            },
+            { 
+                no: 30, kd: "3.19", materi: "Readability", indikator: "Mengevaluasi keterbacaan tipografi",
+                level: "C4", bentuk: "PG",
+                soal: "Faktor yang paling mempengaruhi readability (keterbacaan) teks adalah...",
+                pilihan: ["Warna background yang ramai", "Ukuran font terlalu kecil dengan spasi sempit", "Penggunaan font yang jelas dengan spasi memadai", "Banyaknya dekorasi", "Jumlah halaman"],
+                kunci: "C", pembahasan: "Readability optimal dicapai dengan font yang jelas, ukuran cukup besar, spasi (leading, tracking) memadai, dan kontras baik dengan background.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 151-153"
+            },
+            { 
+                no: 31, kd: "3.20", materi: "Raster vs Vektor", indikator: "Membedakan karakteristik raster dan vektor",
+                level: "C2", bentuk: "PG",
+                soal: "Perbedaan utama antara gambar raster dan vektor adalah...",
+                pilihan: ["Raster lebih mahal", "Raster berbasis pixel, vektor berbasis matematis", "Vektor hanya hitam putih", "Raster tidak bisa dicetak", "Tidak ada perbedaan"],
+                kunci: "B", pembahasan: "Gambar raster terdiri dari pixel/titik warna, sedangkan vektor menggunakan persamaan matematis kurva dan garis, sehingga scalable tanpa kehilangan kualitas.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 155-158"
+            },
+            { 
+                no: 32, kd: "3.20", materi: "Format JPEG", indikator: "Menjelaskan karakteristik format JPEG",
+                level: "C1", bentuk: "PG",
+                soal: "Format JPEG paling cocok digunakan untuk...",
+                pilihan: ["Logo dengan transparansi", "Foto dengan banyak warna", "Animasi bergerak", "Ilustrasi vektor", "Ikon sederhana"],
+                kunci: "B", pembahasan: "JPEG ideal untuk foto dan gambar dengan banyak gradasi warna karena menggunakan kompresi lossy yang efisien, namun tidak mendukung transparansi.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 159-161"
+            },
+            { 
+                no: 33, kd: "3.20", materi: "Format PNG", indikator: "Mengidentifikasi kelebihan PNG",
+                level: "C2", bentuk: "PG",
+                soal: "Kelebihan format PNG dibanding JPEG adalah...",
+                pilihan: ["Ukuran file lebih kecil", "Mendukung transparansi", "Proses lebih cepat", "Hanya untuk cetak", "Tidak berwarna"],
+                kunci: "B", pembahasan: "PNG mendukung transparansi (alpha channel) dan menggunakan kompresi lossless, menjaga kualitas gambar meskipun ukuran file lebih besar dari JPEG.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 162-164"
+            },
+            { 
+                no: 34, kd: "3.20", materi: "Format SVG", indikator: "Memahami kegunaan format SVG",
+                level: "C2", bentuk: "PG",
+                soal: "SVG adalah format file yang...",
+                pilihan: ["Berbasis pixel seperti JPEG", "Berbasis vektor untuk web", "Hanya untuk video", "Tidak bisa dibuka di browser", "Hanya untuk print"],
+                kunci: "B", pembahasan: "SVG (Scalable Vector Graphics) adalah format vektor berbasis XML untuk web, dapat diperbesar tanpa kehilangan kualitas dan ukuran file kecil.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 165-167"
+            },
+            { 
+                no: 35, kd: "3.20", materi: "Format GIF", indikator: "Menjelaskan fungsi format GIF",
+                level: "C1", bentuk: "PG",
+                soal: "Format GIF cocok digunakan untuk...",
+                pilihan: ["Foto landscape berkualitas tinggi", "Animasi sederhana dan ikon", "Dokumen PDF", "File audio", "Video HD"],
+                kunci: "B", pembahasan: "GIF mendukung animasi frame-by-frame dan transparansi, cocok untuk animasi sederhana, ikon, dan gambar dengan warna terbatas (maksimal 256 warna).",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 168-170"
+            },
+            { 
+                no: 36, kd: "3.20", materi: "Kompresi gambar", indikator: "Menerapkan kompresi yang tepat",
+                level: "C3", bentuk: "PG",
+                soal: "Kompresi lossy berarti...",
+                pilihan: ["Tidak ada data yang hilang", "Sebagian data gambar dibuang untuk mengurangi ukuran file", "File tidak bisa dibuka", "Hanya untuk vektor", "Kualitas meningkat"],
+                kunci: "B", pembahasan: "Kompresi lossy mengurangi ukuran file dengan membuang sebagian data gambar yang dianggap tidak terlalu penting, menghasilkan file lebih kecil dengan sedikit penurunan kualitas.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 171-173"
+            },
+            { 
+                no: 37, kd: "3.20", materi: "File optimization", indikator: "Mengoptimalkan file untuk web",
+                level: "C3", bentuk: "PG",
+                soal: "Tujuan utama optimasi file gambar untuk web adalah...",
+                pilihan: ["Membuat file sebesar mungkin", "Menyeimbangkan kualitas visual dengan ukuran file kecil", "Menghapus semua warna", "Mengubah semua jadi vektor", "Membuat animasi"],
+                kunci: "B", pembahasan: "Optimasi file web bertujuan menyeimbangkan kualitas visual yang baik dengan ukuran file sekecil mungkin agar loading website cepat dan efisien.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 174-176"
+            },
+            { 
+                no: 38, kd: "3.20", materi: "Color mode", indikator: "Membedakan RGB dan CMYK",
+                level: "C2", bentuk: "PG",
+                soal: "Kapan sebaiknya menggunakan color mode CMYK?",
+                pilihan: ["Untuk desain website", "Untuk desain yang akan dicetak", "Untuk presentasi digital", "Untuk video", "Untuk game"],
+                kunci: "B", pembahasan: "CMYK digunakan untuk desain yang akan dicetak karena sesuai dengan cara printer mencampur tinta Cyan, Magenta, Yellow, dan Black.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 177-179"
+            },
+            { 
+                no: 39, kd: "3.20", materi: "Aspect ratio", indikator: "Menghitung aspect ratio",
+                level: "C3", bentuk: "PG",
+                soal: "Gambar berukuran 1920 x 1080 pixel memiliki aspect ratio...",
+                pilihan: ["4:3", "16:9", "1:1", "3:2", "21:9"],
+                kunci: "B", pembahasan: "Aspect ratio 1920:1080 dapat disederhanakan menjadi 16:9 dengan membagi keduanya dengan 120, ini adalah rasio standar HD dan Full HD.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 180-182"
+            },
+            { 
+                no: 40, kd: "3.20", materi: "Canvas size", indikator: "Menentukan ukuran canvas untuk berbagai media",
+                level: "C4", bentuk: "PG",
+                soal: "Ukuran canvas yang tepat untuk Instagram post adalah...",
+                pilihan: ["1920 x 1080 px", "1080 x 1080 px", "1200 x 628 px", "1024 x 768 px", "800 x 600 px"],
+                kunci: "B", pembahasan: "Instagram post optimal menggunakan 1080 x 1080 px (1:1 square) atau 1080 x 1350 px (4:5 portrait), dengan 1080px sebagai resolusi maksimal yang didukung.",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 183-185"
+            },
+            // Essay 1-5
+            { 
+                no: 41, kd: "4.1", materi: "Analisis desain grafis", indikator: "Menganalisis perbedaan vektor dan raster",
+                level: "C4", bentuk: "Essay",
+                soal: "Jelaskan perbedaan antara desain grafis vektor dan raster, serta berikan contoh penggunaan masing-masing!",
+                kunci: "Perbedaan Vektor dan Raster:\n• Vektor: Berbasis persamaan matematis (kurva/garis), dapat diperbesar tanpa kehilangan kualitas, ukuran file lebih kecil. Contoh: logo perusahaan, ilustrasi ikon, desain tipografi, infografis.\n• Raster: Berbasis pixel/titik, kualitas menurun saat diperbesar, ukuran file lebih besar. Contoh: foto digital, manipulasi foto, web design, tekstur kompleks.",
+                pembahasan: "Skor 20: Menjelaskan perbedaan lengkap (berbasis pixel vs matematis), kelebihan-kekurangan, dan memberikan 2+ contoh penggunaan untuk masing-masing dengan tepat\nSkor 15: Menjelaskan perbedaan dengan cukup baik dan memberikan minimal 1 contoh untuk masing-masing\nSkor 10: Menjelaskan perbedaan dasar tetapi contoh kurang tepat atau tidak lengkap\nSkor 5: Penjelasan sangat singkat dan contoh tidak tepat\nSkor 0: Tidak menjawab atau jawaban salah total",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 25-35"
+            },
+            { 
+                no: 42, kd: "4.2", materi: "Prinsip desain", indikator: "Menjelaskan prinsip-prinsip desain",
+                level: "C2", bentuk: "Essay",
+                soal: "Sebutkan dan jelaskan minimal 4 prinsip desain grafis beserta fungsinya!",
+                kunci: "Prinsip-prinsip desain:\n1. Balance (Keseimbangan): Distribusi visual weight untuk menciptakan stabilitas\n2. Contrast (Kontras): Perbedaan elemen untuk menciptakan fokus dan menarik perhatian\n3. Hierarchy (Hierarki): Pengaturan elemen berdasarkan tingkat kepentingan\n4. Unity (Kesatuan): Kohesi semua elemen agar terlihat sebagai satu kesatuan utuh\n5. Alignment (Perataan): Penataan elemen pada sumbu yang sama untuk menciptakan keteraturan",
+                pembahasan: "Skor 20: Menyebutkan dan menjelaskan 4+ prinsip dengan detail dan fungsi yang tepat\nSkor 15: Menyebutkan 4 prinsip dengan penjelasan cukup baik\nSkor 10: Menyebutkan 3 prinsip dengan penjelasan sederhana\nSkor 5: Menyebutkan kurang dari 3 atau penjelasan kurang tepat\nSkor 0: Tidak menjawab atau jawaban salah",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 45-65"
+            },
+            { 
+                no: 43, kd: "4.3", materi: "Teori warna dalam desain", indikator: "Menganalisis pentingnya pemilihan warna",
+                level: "C4", bentuk: "Essay",
+                soal: "Analisis mengapa pemilihan warna sangat penting dalam desain grafis! Berikan contoh kasus konkret!",
+                kunci: "Pentingnya pemilihan warna:\n1. Komunikasi Pesan: Warna menyampaikan emosi dan makna (merah=energi/bahaya, biru=trust/profesional)\n2. Identitas Brand: Warna membedakan brand dari kompetitor (merah Coca-Cola, biru Facebook)\n3. Psikologi & Persepsi: Warna mempengaruhi keputusan dan perilaku konsumen\n4. Keterbacaan: Kontras warna mempengaruhi legibility teks\n5. Budaya: Makna warna berbeda di tiap budaya\n\nContoh: Brand bank menggunakan biru untuk kesan trust dan profesional, sedangkan fast-food menggunakan merah-kuning untuk stimulasi nafsu makan dan urgensi.",
+                pembahasan: "Skor 20: Analisis lengkap dengan 4+ alasan disertai contoh kasus konkret dan relevan\nSkor 15: Analisis baik dengan 3 alasan dan contoh cukup jelas\nSkor 10: Analisis dasar dengan 2 alasan dan contoh kurang spesifik\nSkor 5: Analisis sangat singkat tanpa contoh jelas\nSkor 0: Tidak menjawab atau jawaban tidak relevan",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 115-135"
+            },
+            { 
+                no: 44, kd: "4.4", materi: "Tipografi dalam desain", indikator: "Menjelaskan fungsi dan pemilihan font",
+                level: "C2", bentuk: "Essay",
+                soal: "Jelaskan perbedaan font serif dan sans-serif, serta kapan sebaiknya masing-masing digunakan!",
+                kunci: "Perbedaan Serif dan Sans-serif:\n\nSerif:\n• Memiliki kait/garis kecil di ujung huruf\n• Kesan: formal, tradisional, elegan, dapat dipercaya\n• Penggunaan: Dokumen formal, buku, surat kabar, logo tradisional, undangan\n• Contoh: Times New Roman, Georgia, Garamond\n\nSans-serif:\n• Tidak memiliki kait, bentuk lebih bersih\n• Kesan: modern, minimalis, clean, friendly\n• Penggunaan: Website, presentasi digital, signage, brand modern, UI/UX\n• Contoh: Arial, Helvetica, Roboto, Open Sans\n\nSans-serif lebih mudah dibaca di layar digital, sedangkan serif lebih nyaman untuk teks panjang di media cetak.",
+                pembahasan: "Skor 20: Menjelaskan perbedaan lengkap (ciri visual, kesan, penggunaan) dengan contoh konkret untuk masing-masing\nSkor 15: Menjelaskan perbedaan cukup baik dengan contoh\nSkor 10: Menjelaskan perbedaan dasar tetapi kurang detail\nSkor 5: Penjelasan sangat singkat tanpa contoh\nSkor 0: Tidak menjawab atau jawaban salah",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 60-70, 138-150"
+            },
+            { 
+                no: 45, kd: "4.5", materi: "Workflow desain grafis", indikator: "Menjelaskan proses workflow desain",
+                level: "C2", bentuk: "Essay",
+                soal: "Jelaskan tahapan workflow (alur kerja) dalam membuat sebuah desain grafis dari awal hingga akhir!",
+                kunci: "Workflow Desain Grafis:\n\n1. Brief & Research\n• Memahami kebutuhan klien/project\n• Riset target audience, kompetitor, trend\n• Kumpulkan referensi dan inspirasi\n\n2. Ideation & Sketching\n• Brainstorming ide konsep\n• Membuat sketsa kasar manual/digital\n• Eksplorasi berbagai alternatif\n\n3. Design Development\n• Membuat desain digital di software\n• Memilih warna, tipografi, komposisi\n• Refinement detail\n\n4. Review & Revision\n• Presentasi ke klien/tim\n• Feedback dan revisi\n• Iterasi hingga approved\n\n5. Finalization\n• Persiapan file final (format, resolusi)\n• Export untuk berbagai media (print/digital)\n• Dokumentasi dan archiving\n\n6. Delivery\n• Serahkan file ke klien/printer\n• Panduan penggunaan jika diperlukan",
+                pembahasan: "Skor 20: Menjelaskan 5-6 tahapan workflow secara runtut dan detail dengan sub-poin jelas\nSkor 15: Menjelaskan 4-5 tahapan dengan cukup jelas\nSkor 10: Menjelaskan 3 tahapan dasar\nSkor 5: Penjelasan sangat singkat dan tidak runtut\nSkor 0: Tidak menjawab atau jawaban tidak relevan",
+                buku: "Modul Desain Grafis SMK Kelas X, Kemendikbud 2021, Hal. 10-20, 190-195"
+            }
+        ];
+
+        async function initApp() {
+            await window.elementSdk.init({
+                defaultConfig,
+                onConfigChange: renderApp,
+                mapToCapabilities: (config) => ({
+                    recolorables: [
+                        {
+                            get: () => config.background_color || defaultConfig.background_color,
+                            set: (value) => {
+                                config.background_color = value;
+                                window.elementSdk.setConfig({ background_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.card_color || defaultConfig.card_color,
+                            set: (value) => {
+                                config.card_color = value;
+                                window.elementSdk.setConfig({ card_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.primary_color || defaultConfig.primary_color,
+                            set: (value) => {
+                                config.primary_color = value;
+                                window.elementSdk.setConfig({ primary_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.text_color || defaultConfig.text_color,
+                            set: (value) => {
+                                config.text_color = value;
+                                window.elementSdk.setConfig({ text_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.accent_color || defaultConfig.accent_color,
+                            set: (value) => {
+                                config.accent_color = value;
+                                window.elementSdk.setConfig({ accent_color: value });
+                            }
+                        }
+                    ],
+                    borderables: [],
+                    fontEditable: {
+                        get: () => config.font_family || defaultConfig.font_family,
+                        set: (value) => {
+                            config.font_family = value;
+                            window.elementSdk.setConfig({ font_family: value });
+                        }
+                    },
+                    fontSizeable: {
+                        get: () => config.font_size || defaultConfig.font_size,
+                        set: (value) => {
+                            config.font_size = value;
+                            window.elementSdk.setConfig({ font_size: value });
+                        }
+                    }
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ["school_name", config.school_name || defaultConfig.school_name],
+                    ["teacher_name", config.teacher_name || defaultConfig.teacher_name],
+                    ["subject", config.subject || defaultConfig.subject],
+                    ["class_grade", config.class_grade || defaultConfig.class_grade],
+                    ["exam_type", config.exam_type || defaultConfig.exam_type],
+                    ["principal_name", config.principal_name || defaultConfig.principal_name]
+                ])
+            });
+
+            renderApp(window.elementSdk.config);
+        }
+
+        function renderApp(config) {
+            const app = document.getElementById('app');
+            const customFont = config.font_family || defaultConfig.font_family;
+            const baseFont = `${customFont}, 'Times New Roman', serif`;
+            const baseSize = config.font_size || defaultConfig.font_size;
+            const bgColor = config.background_color || defaultConfig.background_color;
+            const cardColor = config.card_color || defaultConfig.card_color;
+            const primaryColor = config.primary_color || defaultConfig.primary_color;
+            const textColor = config.text_color || defaultConfig.text_color;
+            const accentColor = config.accent_color || defaultConfig.accent_color;
+
+            app.style.background = bgColor;
+            app.style.fontFamily = baseFont;
+            app.style.fontSize = `${baseSize}px`;
+            app.style.color = textColor;
+            app.style.minHeight = '100%';
+            app.style.padding = '20px';
+
+            app.innerHTML = `
+                <div class="w-full max-w-7xl mx-auto">
+                    <!-- Control Panel -->
+                    <div class="no-print mb-6 p-6 rounded-lg shadow-lg" style="background: ${cardColor};">
+                        <div class="flex justify-between items-center flex-wrap gap-4">
+                            <div>
+                                <h1 class="font-bold mb-2" style="font-size: ${baseSize * 1.8}px; color: ${primaryColor};">
+                                    📋 Kisi-Kisi & Kartu Soal
+                                </h1>
+                                <p style="font-size: ${baseSize * 0.95}px; color: ${textColor};">
+                                    ${config.subject || defaultConfig.subject} - ${config.class_grade || defaultConfig.class_grade}
+                                </p>
+                            </div>
+                            <button 
+                                id="printBtn"
+                                class="px-6 py-3 rounded-lg font-semibold shadow-md transition hover:shadow-lg"
+                                style="background: ${accentColor}; color: white; font-size: ${baseSize}px;"
+                            >
+                                🖨️ Cetak Dokumen
+                            </button>
+                        </div>
+
+                        <!-- Tabs -->
+                        <div class="flex gap-2 mt-6 border-b" style="border-color: ${primaryColor}20;">
+                            <button 
+                                class="tab-button ${currentTab === 'kisi-kisi' ? 'active' : ''}"
+                                data-tab="kisi-kisi"
+                                style="color: ${currentTab === 'kisi-kisi' ? primaryColor : textColor}; font-size: ${baseSize}px;"
+                            >
+                                📊 Kisi-Kisi Soal
+                            </button>
+                            <button 
+                                class="tab-button ${currentTab === 'kartu-soal' ? 'active' : ''}"
+                                data-tab="kartu-soal"
+                                style="color: ${currentTab === 'kartu-soal' ? primaryColor : textColor}; font-size: ${baseSize}px;"
+                            >
+                                📝 Kartu Soal
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="print-container" id="printContent">
+                        ${currentTab === 'kisi-kisi' ? renderKisiKisi(config) : renderKartuSoal(config)}
+                    </div>
+                </div>
+            `;
+
+            // Event listeners
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    currentTab = e.target.dataset.tab;
+                    renderApp(config);
+                });
+            });
+
+            const printBtn = document.getElementById('printBtn');
+            if (printBtn) {
+                printBtn.addEventListener('click', () => {
+                    window.print();
+                });
+            }
+        }
+
+        function renderKisiKisi(config) {
+            const baseSize = config.font_size || defaultConfig.font_size;
+            const cardColor = config.card_color || defaultConfig.card_color;
+            const schoolName = config.school_name || defaultConfig.school_name;
+            const teacherName = config.teacher_name || defaultConfig.teacher_name;
+            const subject = config.subject || defaultConfig.subject;
+            const classGrade = config.class_grade || defaultConfig.class_grade;
+            const examType = config.exam_type || defaultConfig.exam_type;
+
+            return `
+                <div class="rounded-lg shadow-xl p-8" style="background: ${cardColor};">
+                    <!-- Header -->
+                    <div class="header-doc">
+                        <div class="font-bold" style="font-size: ${baseSize * 1.2}px;">${schoolName}</div>
+                        <div class="doc-title" style="font-size: ${baseSize * 1.3}px;">KISI-KISI SOAL</div>
+                        <div style="font-size: ${baseSize * 1.1}px; font-weight: 600;">${examType}</div>
+                    </div>
+
+                    <!-- Info Table -->
+                    <table class="info-table" style="font-size: ${baseSize * 0.95}px;">
+                        <tr>
+                            <td style="width: 200px;"><strong>Nama Sekolah</strong></td>
+                            <td style="width: 20px;">:</td>
+                            <td>${schoolName}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mata Pelajaran</strong></td>
+                            <td>:</td>
+                            <td>${subject}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kelas/Semester</strong></td>
+                            <td>:</td>
+                            <td>${classGrade}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kurikulum</strong></td>
+                            <td>:</td>
+                            <td>Kurikulum Merdeka</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Jumlah Soal</strong></td>
+                            <td>:</td>
+                            <td>45 Soal (40 Pilihan Ganda + 5 Essay)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bentuk Soal</strong></td>
+                            <td>:</td>
+                            <td>Pilihan Ganda dan Essay</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Alokasi Waktu</strong></td>
+                            <td>:</td>
+                            <td>90 Menit</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Penyusun</strong></td>
+                            <td>:</td>
+                            <td>${teacherName}</td>
+                        </tr>
+                    </table>
+
+                    <!-- Kisi-Kisi Table -->
+                    <table style="font-size: ${baseSize * 0.9}px; margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;">No</th>
+                                <th style="width: 80px;">Kompetensi Dasar</th>
+                                <th style="width: 180px;">Materi Pokok</th>
+                                <th>Indikator Soal</th>
+                                <th style="width: 80px;">Bentuk Soal</th>
+                                <th style="width: 80px;">No. Soal</th>
+                                <th style="width: 60px;">Level Kognitif</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${kisiKisiData.map(item => `
+                                <tr>
+                                    <td style="text-align: center;">${item.no}</td>
+                                    <td style="text-align: center;">${item.kd}</td>
+                                    <td>${item.materi}</td>
+                                    <td>${item.indikator}</td>
+                                    <td style="text-align: center;">${item.bentuk}</td>
+                                    <td style="text-align: center;">${item.nomor}</td>
+                                    <td style="text-align: center;">${item.level}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+
+                    <!-- Keterangan Level Kognitif -->
+                    <div style="margin-top: 20px; padding: 15px; background: #f9fafb; border-radius: 8px; font-size: ${baseSize * 0.85}px;">
+                        <strong>Keterangan Level Kognitif:</strong><br>
+                        <strong>C1 (Mengingat):</strong> Mengingat kembali informasi/pengetahuan dari memori<br>
+                        <strong>C2 (Memahami):</strong> Membangun pengertian dari berbagai sumber informasi<br>
+                        <strong>C3 (Menerapkan):</strong> Menggunakan prosedur untuk menyelesaikan masalah<br>
+                        <strong>C4 (Menganalisis):</strong> Memecah materi menjadi bagian dan menentukan hubungan antar bagian
+                    </div>
+
+                    <!-- Signature Section -->
+                    <div class="signature-row" style="margin-top: 50px; font-size: ${baseSize * 0.95}px;">
+                        <div class="signature-box">
+                            <div style="margin-bottom: 5px;">Mengetahui,</div>
+                            <div style="font-weight: 600;">Kepala Sekolah</div>
+                            <div class="signature-space"></div>
+                            <div style="font-weight: 600;">___________________________</div>
+                            <div>NIP. ____________________</div>
+                        </div>
+                        <div class="signature-box">
+                            <div style="margin-bottom: 5px;">Rancakalong, 03 Desember 2024</div>
+                            <div style="font-weight: 600;">Guru Mata Pelajaran</div>
+                            <div class="signature-space"></div>
+                            <div style="font-weight: 600; text-decoration: underline;">${teacherName}</div>
+                            <div>NIP. ____________________</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderKartuSoal(config) {
+            const baseSize = config.font_size || defaultConfig.font_size;
+            const cardColor = config.card_color || defaultConfig.card_color;
+            const schoolName = config.school_name || defaultConfig.school_name;
+            const teacherName = config.teacher_name || defaultConfig.teacher_name;
+            const subject = config.subject || defaultConfig.subject;
+            const classGrade = config.class_grade || defaultConfig.class_grade;
+            const examType = config.exam_type || defaultConfig.exam_type;
+
+            let html = '<div style="background: ' + cardColor + ';">';
+
+            // Generate semua kartu soal
+            soalData.forEach((soal, index) => {
+                const jenisSoal = soal.bentuk === 'PG' ? 'PILIHAN GANDA' : 'URAIAN / ESSAY';
+
+                html += `
+                    <div class="kartu-soal-box">
+                        <div class="header-doc">
+                            <div class="font-bold" style="font-size: ${baseSize * 1.1}px;">${schoolName}</div>
+                            <div class="doc-title" style="font-size: ${baseSize * 1.2}px;">KARTU SOAL ${jenisSoal}</div>
+                            <div style="font-size: ${baseSize}px; font-weight: 600;">${examType}</div>
+                        </div>
+
+                        <table class="info-table" style="font-size: ${baseSize * 0.9}px;">
+                            <tr>
+                                <td style="width: 180px;"><strong>Mata Pelajaran</strong></td>
+                                <td style="width: 20px;">:</td>
+                                <td>${subject}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Kelas/Semester</strong></td>
+                                <td>:</td>
+                                <td>${classGrade}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Kurikulum</strong></td>
+                                <td>:</td>
+                                <td>Kurikulum Merdeka</td>
+                            </tr>
+                        </table>
+
+                        <table style="font-size: ${baseSize * 0.9}px; margin-top: 15px;">
+                            <tr>
+                                <td style="width: 180px;"><strong>Kompetensi Dasar</strong></td>
+                                <td><strong>${soal.kd}</strong> ${soal.materi}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Materi</strong></td>
+                                <td>${soal.materi}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Indikator Soal</strong></td>
+                                <td>${soal.indikator}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Level Kognitif</strong></td>
+                                <td><strong>${soal.level}</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nomor Soal</strong></td>
+                                <td><strong>${soal.no}</strong></td>
+                            </tr>
+                        </table>
+
+                        <div class="soal-content" style="font-size: ${baseSize * 0.95}px;">
+                            <div style="font-weight: 600; margin-bottom: 10px;">RUMUSAN BUTIR SOAL:</div>
+                            <div style="line-height: 1.8;">
+                                <strong>${soal.no}.</strong> ${soal.soal}
+                `;
+
+                // Pilihan untuk PG
+                if (soal.bentuk === 'PG') {
+                    soal.pilihan.forEach((pilihan, i) => {
+                        const huruf = String.fromCharCode(65 + i); // A, B, C, D, E
+                        const isKunci = soal.kunci === huruf;
+                        html += `<div class="option-item"><strong>${huruf}.</strong> ${pilihan}${isKunci ? ' ✓' : ''}</div>`;
+                    });
+                }
+
+                html += `
+                            </div>
+                        </div>
+
+                        <table style="font-size: ${baseSize * 0.85}px; margin-top: 15px;">
+                `;
+
+                if (soal.bentuk === 'PG') {
+                    html += `
+                            <tr>
+                                <td style="width: 150px;"><strong>Kunci Jawaban</strong></td>
+                                <td><strong>${soal.kunci}</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pembahasan</strong></td>
+                                <td>${soal.pembahasan}</td>
+                            </tr>
+                    `;
+                } else {
+                    html += `
+                            <tr>
+                                <td style="width: 150px; vertical-align: top;"><strong>Pedoman Penskoran</strong></td>
+                                <td>${soal.pembahasan.replace(/\n/g, '<br>')}</td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: top;"><strong>Kunci Jawaban</strong></td>
+                                <td>${soal.kunci.replace(/\n/g, '<br>')}</td>
+                            </tr>
+                    `;
+                }
+
+                html += `
+                            <tr>
+                                <td><strong>Buku Sumber</strong></td>
+                                <td>${soal.buku}</td>
+                            </tr>
+                        </table>
+
+                        <div class="signature-row" style="margin-top: 40px; font-size: ${baseSize * 0.85}px;">
+                            <div class="signature-box">
+                                <div style="margin-bottom: 5px;">Mengetahui,</div>
+                                <div style="font-weight: 600;">Kepala Sekolah</div>
+                                <div class="signature-space"></div>
+                                <div style="font-weight: 600;">___________________________</div>
+                                <div>NIP. ____________________</div>
+                            </div>
+                            <div class="signature-box">
+                                <div style="margin-bottom: 5px;">Rancakalong, 03 Desember 2024</div>
+                                <div style="font-weight: 600;">Guru Mata Pelajaran</div>
+                                <div class="signature-space"></div>
+                                <div style="font-weight: 600; text-decoration: underline;">${teacherName}</div>
+                                <div>NIP. ____________________</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Page break kecuali kartu terakhir
+                if (index < soalData.length - 1) {
+                    html += '<div class="page-break"></div>';
+                }
+            });
+
+            html += '</div>';
+
+            return html;
+        }
+
+        initApp();
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a82f63906eaf892',t:'MTc2NDc2MzgzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

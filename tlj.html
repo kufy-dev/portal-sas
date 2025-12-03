@@ -1,0 +1,1338 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kisi-kisi &amp; Kartu Soal PAS TLJ</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Times New Roman', Times, serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+            width: 100%;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .app-container {
+            width: 100%;
+            min-height: 100%;
+            padding: 30px 20px;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Navigation */
+        .header-nav {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .nav-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #2a5298;
+            color: #2a5298;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #2a5298;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(42, 82, 152, 0.3);
+        }
+
+        .nav-btn.active {
+            background: #2a5298;
+            color: white;
+        }
+
+        /* Document Container */
+        .document {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            margin-bottom: 20px;
+        }
+
+        /* Official Header Style */
+        .official-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #000;
+        }
+
+        .official-header h1 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 8px 0;
+            text-transform: uppercase;
+        }
+
+        .official-header h2 {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .official-header p {
+            font-size: 14px;
+            margin: 4px 0;
+        }
+
+        /* Kisi-kisi Table */
+        .info-table {
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .info-table td {
+            padding: 6px;
+            vertical-align: top;
+        }
+
+        .info-table .label {
+            width: 180px;
+            font-weight: bold;
+        }
+
+        .info-table .colon {
+            width: 20px;
+        }
+
+        .kisi-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        .kisi-table th,
+        .kisi-table td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .kisi-table th {
+            background: #e3f2fd;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .kisi-table .center {
+            text-align: center;
+        }
+
+        .kisi-table .col-no {
+            width: 40px;
+        }
+
+        .kisi-table .col-kd {
+            width: 200px;
+        }
+
+        .kisi-table .col-materi {
+            width: 180px;
+        }
+
+        .kisi-table .col-indikator {
+            width: 250px;
+        }
+
+        .kisi-table .col-level {
+            width: 80px;
+        }
+
+        .kisi-table .col-bentuk {
+            width: 80px;
+        }
+
+        .kisi-table .col-nomor {
+            width: 60px;
+        }
+
+        /* Kartu Soal Style */
+        .kartu-soal {
+            page-break-after: always;
+            margin-bottom: 30px;
+            border: 2px solid #000;
+            padding: 20px;
+        }
+
+        .kartu-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+
+        .kartu-field {
+            display: flex;
+            margin-bottom: 8px;
+        }
+
+        .kartu-field .label {
+            width: 150px;
+            font-weight: bold;
+        }
+
+        .kartu-field .colon {
+            width: 20px;
+        }
+
+        .kartu-field .value {
+            flex: 1;
+        }
+
+        .kartu-section {
+            margin: 20px 0;
+        }
+
+        .kartu-section h3 {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #e3f2fd;
+            border-left: 4px solid #2a5298;
+        }
+
+        .kartu-section .content {
+            padding: 10px;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .options-list li {
+            margin: 8px 0;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .answer-key {
+            background: #d4edda;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            border-left: 4px solid #28a745;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .header-nav {
+                display: none;
+            }
+
+            .app-container {
+                padding: 0;
+            }
+
+            .document {
+                box-shadow: none;
+                page-break-after: always;
+            }
+
+            .nav-btn {
+                display: none;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .document {
+                padding: 20px;
+            }
+
+            .official-header h1 {
+                font-size: 16px;
+            }
+
+            .kisi-table {
+                font-size: 10px;
+            }
+
+            .kisi-table th,
+            .kisi-table td {
+                padding: 6px;
+            }
+
+            .kartu-header {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
+        }
+
+        .signature-section {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature-box {
+            text-align: center;
+            width: 45%;
+        }
+
+        .signature-box p {
+            margin: 4px 0;
+            font-size: 13px;
+        }
+
+        .signature-space {
+            height: 60px;
+        }
+
+        .download-section {
+            text-align: center;
+            padding: 20px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .btn-download {
+            padding: 12px 32px;
+            background: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0 8px;
+        }
+
+        .btn-download:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(42, 82, 152, 0.4);
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="app-container">
+   <div class="main-content"><!-- Navigation -->
+    <div class="header-nav">
+     <div class="nav-title">
+      📋 Administrasi Penilaian Akhir Semester
+     </div>
+     <div class="nav-buttons"><button class="nav-btn active" onclick="showSection('kisi')">Kisi-kisi Soal</button> <button class="nav-btn" onclick="showSection('kartu')">Kartu Soal</button> <button class="nav-btn" onclick="printDocument()">🖨️ Cetak Dokumen</button>
+     </div>
+    </div><!-- Kisi-kisi Section -->
+    <div id="kisiSection" class="document">
+     <div class="official-header">
+      <h1>KISI-KISI PENULISAN SOAL</h1>
+      <h2>PENILAIAN AKHIR SEMESTER (PAS) GASAL</h2>
+      <p id="kisiYear">TAHUN PELAJARAN 2024/2025</p>
+     </div>
+     <table class="info-table">
+      <tbody>
+       <tr>
+        <td class="label">Nama Sekolah</td>
+        <td class="colon">:</td>
+        <td id="kisiSchool">SMK CENDIKIA RANCAKALONG</td>
+       </tr>
+       <tr>
+        <td class="label">Mata Pelajaran</td>
+        <td class="colon">:</td>
+        <td id="kisiSubject">Teknologi &amp; Layanan Jaringan (TLJ)</td>
+       </tr>
+       <tr>
+        <td class="label">Kelas/Semester</td>
+        <td class="colon">:</td>
+        <td id="kisiGrade">XI / 1 (Ganjil)</td>
+       </tr>
+       <tr>
+        <td class="label">Kurikulum</td>
+        <td class="colon">:</td>
+        <td>Kurikulum Merdeka</td>
+       </tr>
+       <tr>
+        <td class="label">Jumlah Soal</td>
+        <td class="colon">:</td>
+        <td>45 Soal (40 Pilihan Ganda + 5 Essay)</td>
+       </tr>
+       <tr>
+        <td class="label">Bentuk Soal</td>
+        <td class="colon">:</td>
+        <td>Pilihan Ganda dan Essay</td>
+       </tr>
+       <tr>
+        <td class="label">Alokasi Waktu</td>
+        <td class="colon">:</td>
+        <td>90 Menit</td>
+       </tr>
+       <tr>
+        <td class="label">Penyusun</td>
+        <td class="colon">:</td>
+        <td id="kisiTeacher">Lutfi Maulana, S.Tr.T., Gr.</td>
+       </tr>
+      </tbody>
+     </table>
+     <table class="kisi-table">
+      <thead>
+       <tr>
+        <th class="col-no">No</th>
+        <th class="col-kd">Kompetensi Dasar / Capaian Pembelajaran</th>
+        <th class="col-materi">Materi Pokok</th>
+        <th class="col-indikator">Indikator Soal</th>
+        <th class="col-level">Level Kognitif</th>
+        <th class="col-bentuk">Bentuk Soal</th>
+        <th class="col-nomor">No. Soal</th>
+       </tr>
+      </thead>
+      <tbody id="kisiTableBody"><!-- Will be populated by JavaScript -->
+      </tbody>
+     </table>
+     <div class="signature-section">
+      <div class="signature-box">
+       <p>Mengetahui,</p>
+       <p><strong>Kepala Sekolah</strong></p>
+       <div class="signature-space"></div>
+       <p><strong>___________________</strong></p>
+       <p>NIP. ___________________</p>
+      </div>
+      <div class="signature-box">
+       <p id="signatureDate">___________, ___________</p>
+       <p><strong>Guru Mata Pelajaran</strong></p>
+       <div class="signature-space"></div>
+       <p><strong id="signatureTeacher">Lutfi Maulana, S.Tr.T., Gr.</strong></p>
+       <p>NIP. ___________________</p>
+      </div>
+     </div>
+    </div><!-- Kartu Soal Section -->
+    <div id="kartuSection" class="document" style="display: none;">
+     <div id="kartuSoalContainer"><!-- Will be populated by JavaScript -->
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+        const defaultConfig = {
+            school_name: "SMK CENDIKIA RANCAKALONG",
+            subject: "Teknologi & Layanan Jaringan (TLJ)",
+            grade: "XI / 1 (Ganjil)",
+            teacher_name: "Lutfi Maulana, S.Tr.T., Gr.",
+            year: "2024/2025"
+        };
+
+        const kisiKisiData = [
+            {
+                no: 1,
+                kd: "Memahami model referensi jaringan OSI dan TCP/IP",
+                materi: "Model Referensi Jaringan",
+                indikator: "Disajikan pertanyaan, peserta didik dapat mengidentifikasi kepanjangan dan fungsi OSI",
+                level: "C1",
+                bentuk: "PG",
+                nomor: "1, 2"
+            },
+            {
+                no: 2,
+                kd: "Memahami protokol-protokol jaringan dan aplikasinya",
+                materi: "Protokol Jaringan",
+                indikator: "Peserta didik dapat mengidentifikasi protokol yang digunakan untuk layanan tertentu",
+                level: "C2",
+                bentuk: "PG",
+                nomor: "3, 9, 10, 26, 33"
+            },
+            {
+                no: 3,
+                kd: "Menerapkan konsep IP Address dan subnet mask",
+                materi: "IP Address & Subnetting",
+                indikator: "Disajikan IP address, peserta didik dapat menentukan kelas dan subnet mask yang sesuai",
+                level: "C3",
+                bentuk: "PG",
+                nomor: "4, 7, 37"
+            },
+            {
+                no: 4,
+                kd: "Menganalisis perangkat jaringan dan fungsinya",
+                materi: "Perangkat Jaringan",
+                indikator: "Peserta didik dapat menganalisis fungsi perangkat jaringan sesuai layer OSI",
+                level: "C4",
+                bentuk: "PG",
+                nomor: "5, 24, 28"
+            },
+            {
+                no: 5,
+                kd: "Memahami topologi jaringan dan karakteristiknya",
+                materi: "Topologi Jaringan",
+                indikator: "Peserta didik dapat membedakan karakteristik berbagai topologi jaringan",
+                level: "C2",
+                bentuk: "PG",
+                nomor: "6"
+            },
+            {
+                no: 6,
+                kd: "Menerapkan instalasi kabel jaringan",
+                materi: "Kabel & Media Transmisi",
+                indikator: "Peserta didik dapat menentukan standar dan spesifikasi kabel jaringan",
+                level: "C3",
+                bentuk: "PG",
+                nomor: "8, 17, 21, 29"
+            },
+            {
+                no: 7,
+                kd: "Memahami layanan DHCP dan DNS",
+                materi: "Layanan Jaringan",
+                indikator: "Peserta didik dapat menjelaskan fungsi layanan DHCP dan DNS",
+                level: "C2",
+                bentuk: "PG",
+                nomor: "12, 16"
+            },
+            {
+                no: 8,
+                kd: "Memahami arsitektur TCP/IP",
+                materi: "Model TCP/IP",
+                indikator: "Peserta didik dapat mengidentifikasi layer TCP/IP dan fungsinya",
+                level: "C1",
+                bentuk: "PG",
+                nomor: "13, 19, 20"
+            },
+            {
+                no: 9,
+                kd: "Menggunakan utilitas jaringan untuk troubleshooting",
+                materi: "Network Utility",
+                indikator: "Peserta didik dapat menentukan perintah yang tepat untuk konfigurasi jaringan",
+                level: "C3",
+                bentuk: "PG",
+                nomor: "14"
+            },
+            {
+                no: 10,
+                kd: "Memahami konsep keamanan jaringan",
+                materi: "Network Security",
+                indikator: "Peserta didik dapat menjelaskan fungsi firewall dan VPN",
+                level: "C2",
+                bentuk: "PG",
+                nomor: "15, 25"
+            },
+            {
+                no: 11,
+                kd: "Memahami teknologi wireless",
+                materi: "Jaringan Nirkabel",
+                indikator: "Peserta didik dapat mengidentifikasi standar dan metode akses WiFi",
+                level: "C2",
+                bentuk: "PG",
+                nomor: "11, 31, 34"
+            },
+            {
+                no: 12,
+                kd: "Memahami konsep VLAN",
+                materi: "Virtual LAN",
+                indikator: "Peserta didik dapat menjelaskan konsep dan fungsi VLAN",
+                level: "C2",
+                bentuk: "PG",
+                nomor: "18"
+            },
+            {
+                no: 13,
+                kd: "Memahami NAT dan fungsinya",
+                materi: "Network Address Translation",
+                indikator: "Peserta didik dapat mengidentifikasi kepanjangan dan fungsi NAT",
+                level: "C1",
+                bentuk: "PG",
+                nomor: "23"
+            },
+            {
+                no: 14,
+                kd: "Menganalisis konsep bandwidth dan QoS",
+                materi: "Quality of Service",
+                indikator: "Peserta didik dapat menganalisis konsep bandwidth, QoS, dan latency",
+                level: "C4",
+                bentuk: "PG",
+                nomor: "22, 30, 38"
+            },
+            {
+                no: 15,
+                kd: "Memahami protokol routing",
+                materi: "Spanning Tree Protocol",
+                indikator: "Peserta didik dapat mengidentifikasi protokol STP",
+                level: "C1",
+                bentuk: "PG",
+                nomor: "39"
+            },
+            {
+                no: 16,
+                kd: "Memahami klasifikasi jaringan berdasarkan area",
+                materi: "Jenis-jenis Jaringan",
+                indikator: "Peserta didik dapat mengidentifikasi jenis jaringan MAN",
+                level: "C1",
+                bentuk: "PG",
+                nomor: "40"
+            },
+            {
+                no: 17,
+                kd: "Memahami konsep IPv6",
+                materi: "IPv6 Addressing",
+                indikator: "Peserta didik dapat menentukan jumlah bit pada IPv6",
+                level: "C1",
+                bentuk: "PG",
+                nomor: "27"
+            },
+            {
+                no: 18,
+                kd: "Memahami layanan proxy dan monitoring",
+                materi: "Network Services",
+                indikator: "Peserta didik dapat menjelaskan fungsi proxy server dan SNMP",
+                level: "C2",
+                bentuk: "PG",
+                nomor: "35, 36"
+            },
+            {
+                no: 19,
+                kd: "Menganalisis konsep load balancing",
+                materi: "Load Balancing",
+                indikator: "Peserta didik dapat menganalisis fungsi load balancing",
+                level: "C4",
+                bentuk: "PG",
+                nomor: "32"
+            },
+            {
+                no: 20,
+                kd: "Menganalisis topologi jaringan",
+                materi: "Analisis Topologi",
+                indikator: "Peserta didik dapat menganalisis kelebihan dan kekurangan topologi jaringan",
+                level: "C4",
+                bentuk: "Essay",
+                nomor: "41"
+            },
+            {
+                no: 21,
+                kd: "Menerapkan subnetting pada jaringan",
+                materi: "Subnetting",
+                indikator: "Disajikan kasus, peserta didik dapat menghitung pembagian subnet",
+                level: "C3",
+                bentuk: "Essay",
+                nomor: "42"
+            },
+            {
+                no: 22,
+                kd: "Membandingkan protokol TCP dan UDP",
+                materi: "Transport Protocol",
+                indikator: "Peserta didik dapat membandingkan karakteristik TCP dan UDP beserta contoh aplikasinya",
+                level: "C4",
+                bentuk: "Essay",
+                nomor: "43"
+            },
+            {
+                no: 23,
+                kd: "Memahami model referensi OSI secara menyeluruh",
+                materi: "7 Layer OSI",
+                indikator: "Peserta didik dapat menjelaskan fungsi setiap layer OSI",
+                level: "C2",
+                bentuk: "Essay",
+                nomor: "44"
+            },
+            {
+                no: 24,
+                kd: "Menganalisis implementasi VLAN",
+                materi: "VLAN Implementation",
+                indikator: "Peserta didik dapat menganalisis konsep dan manfaat VLAN dalam jaringan perusahaan",
+                level: "C4",
+                bentuk: "Essay",
+                nomor: "45"
+            }
+        ];
+
+        const kartuSoalData = [
+            {
+                nomor: 1,
+                kd: "Memahami model referensi jaringan OSI dan TCP/IP",
+                materi: "Model Referensi Jaringan",
+                indikator: "Disajikan pertanyaan, peserta didik dapat mengidentifikasi kepanjangan dan fungsi OSI",
+                soal: "Apa kepanjangan dari OSI dalam model referensi jaringan?",
+                options: ["Open System Interconnection", "Operating System Interface", "Optical Service Integration", "Online System Interface", "Open Service Infrastructure"],
+                kunci: "A",
+                pembahasan: "OSI adalah singkatan dari Open System Interconnection, yaitu model referensi yang dikembangkan oleh ISO untuk standardisasi komunikasi jaringan komputer."
+            },
+            {
+                nomor: 2,
+                kd: "Memahami model referensi jaringan OSI dan TCP/IP",
+                materi: "Layer OSI",
+                indikator: "Peserta didik dapat mengidentifikasi fungsi layer OSI",
+                soal: "Layer OSI yang bertanggung jawab untuk routing adalah...",
+                options: ["Physical Layer", "Data Link Layer", "Network Layer", "Transport Layer", "Session Layer"],
+                kunci: "C",
+                pembahasan: "Network Layer (Layer 3) bertanggung jawab untuk routing, yaitu menentukan jalur terbaik untuk pengiriman paket data dari sumber ke tujuan."
+            },
+            {
+                nomor: 3,
+                kd: "Memahami protokol-protokol jaringan dan aplikasinya",
+                materi: "Protokol Email",
+                indikator: "Peserta didik dapat mengidentifikasi protokol email",
+                soal: "Protokol yang digunakan untuk mengirim email adalah...",
+                options: ["FTP", "HTTP", "SMTP", "SNMP", "POP3"],
+                kunci: "C",
+                pembahasan: "SMTP (Simple Mail Transfer Protocol) adalah protokol yang digunakan untuk mengirim email dari client ke server atau antar server email."
+            },
+            {
+                nomor: 4,
+                kd: "Menerapkan konsep IP Address dan subnet mask",
+                materi: "IP Address & Subnetting",
+                indikator: "Disajikan IP address, peserta didik dapat menentukan kelas dan subnet mask yang sesuai",
+                soal: "IP Address 192.168.1.1 termasuk dalam kelas...",
+                options: ["Kelas A", "Kelas B", "Kelas C", "Kelas D", "Kelas E"],
+                kunci: "C",
+                pembahasan: "IP Address 192.168.1.1 termasuk kelas C karena oktet pertama berada di range 192-223. Kelas C memiliki subnet mask default 255.255.255.0."
+            },
+            {
+                nomor: 5,
+                kd: "Menganalisis perangkat jaringan dan fungsinya",
+                materi: "Perangkat Jaringan",
+                indikator: "Peserta didik dapat menganalisis fungsi perangkat jaringan sesuai layer OSI",
+                soal: "Perangkat jaringan yang bekerja pada layer 2 OSI adalah...",
+                options: ["Router", "Switch", "Repeater", "Gateway", "Modem"],
+                kunci: "B",
+                pembahasan: "Switch bekerja pada Data Link Layer (Layer 2) OSI. Switch menggunakan MAC address untuk meneruskan frame ke port yang tepat."
+            },
+            {
+                nomor: 6,
+                kd: "Memahami topologi jaringan dan karakteristiknya",
+                materi: "Topologi Jaringan",
+                indikator: "Peserta didik dapat membedakan karakteristik berbagai topologi jaringan",
+                soal: "Topologi yang memiliki satu titik pusat yang menghubungkan semua komputer adalah...",
+                options: ["Bus", "Ring", "Star", "Mesh", "Hybrid"],
+                kunci: "C",
+                pembahasan: "Topologi Star memiliki titik pusat (hub/switch) yang menghubungkan semua komputer. Jika titik pusat rusak, seluruh jaringan akan down."
+            },
+            {
+                nomor: 7,
+                kd: "Menerapkan konsep IP Address dan subnet mask",
+                materi: "IP Address & Subnetting",
+                indikator: "Disajikan IP address, peserta didik dapat menentukan kelas dan subnet mask yang sesuai",
+                soal: "Subnet mask default untuk IP kelas B adalah...",
+                options: ["255.0.0.0", "255.255.0.0", "255.255.255.0", "255.255.255.255", "255.128.0.0"],
+                kunci: "B",
+                pembahasan: "Subnet mask default untuk kelas B adalah 255.255.0.0 atau /16 dalam notasi CIDR."
+            },
+            {
+                nomor: 8,
+                kd: "Menerapkan instalasi kabel jaringan",
+                materi: "Kabel & Media Transmisi",
+                indikator: "Peserta didik dapat menentukan standar dan spesifikasi kabel jaringan",
+                soal: "Standar kabel UTP untuk jaringan gigabit ethernet adalah...",
+                options: ["Cat 3", "Cat 5", "Cat 5e", "Cat 6", "Cat 7"],
+                kunci: "D",
+                pembahasan: "Cat 6 adalah standar minimum untuk gigabit ethernet (1000 Mbps). Cat 6 dapat mendukung kecepatan hingga 10 Gbps pada jarak pendek."
+            },
+            {
+                nomor: 9,
+                kd: "Memahami protokol-protokol jaringan dan aplikasinya",
+                materi: "Protokol Jaringan",
+                indikator: "Peserta didik dapat mengidentifikasi protokol yang digunakan untuk layanan tertentu",
+                soal: "Port default untuk protokol HTTP adalah...",
+                options: ["20", "21", "23", "80", "443"],
+                kunci: "D",
+                pembahasan: "Port 80 adalah port default untuk protokol HTTP (Hypertext Transfer Protocol) yang digunakan untuk web browsing."
+            },
+            {
+                nomor: 10,
+                kd: "Memahami protokol-protokol jaringan dan aplikasinya",
+                materi: "Protokol Jaringan",
+                indikator: "Peserta didik dapat mengidentifikasi protokol yang digunakan untuk layanan tertentu",
+                soal: "Protokol yang digunakan untuk transfer file adalah...",
+                options: ["HTTP", "FTP", "SMTP", "DNS", "DHCP"],
+                kunci: "B",
+                pembahasan: "FTP (File Transfer Protocol) adalah protokol yang digunakan untuk transfer file antara client dan server melalui jaringan."
+            },
+            {
+                nomor: 11,
+                kd: "Memahami teknologi wireless",
+                materi: "Jaringan Nirkabel",
+                indikator: "Peserta didik dapat mengidentifikasi standar dan metode akses WiFi",
+                soal: "Standar WiFi yang bekerja pada frekuensi 5 GHz adalah...",
+                options: ["802.11b", "802.11g", "802.11n", "802.11ac", "802.11a"],
+                kunci: "E",
+                pembahasan: "802.11a adalah standar WiFi pertama yang bekerja pada frekuensi 5 GHz. 802.11ac juga bekerja di 5 GHz tetapi lebih modern."
+            },
+            {
+                nomor: 12,
+                kd: "Memahami layanan DHCP dan DNS",
+                materi: "Layanan Jaringan",
+                indikator: "Peserta didik dapat menjelaskan fungsi layanan DHCP dan DNS",
+                soal: "Fungsi utama DHCP server adalah...",
+                options: ["Menerjemahkan domain ke IP", "Memberikan IP address otomatis", "Mengamankan jaringan", "Routing paket data", "Monitoring jaringan"],
+                kunci: "B",
+                pembahasan: "DHCP (Dynamic Host Configuration Protocol) memberikan konfigurasi IP address secara otomatis kepada client dalam jaringan."
+            },
+            {
+                nomor: 13,
+                kd: "Memahami arsitektur TCP/IP",
+                materi: "Model TCP/IP",
+                indikator: "Peserta didik dapat mengidentifikasi layer TCP/IP dan fungsinya",
+                soal: "Jumlah layer pada model TCP/IP adalah...",
+                options: ["3", "4", "5", "6", "7"],
+                kunci: "B",
+                pembahasan: "Model TCP/IP memiliki 4 layer: Network Access, Internet, Transport, dan Application Layer."
+            },
+            {
+                nomor: 14,
+                kd: "Menggunakan utilitas jaringan untuk troubleshooting",
+                materi: "Network Utility",
+                indikator: "Peserta didik dapat menentukan perintah yang tepat untuk konfigurasi jaringan",
+                soal: "Perintah untuk melihat konfigurasi IP pada Windows adalah...",
+                options: ["ifconfig", "ipconfig", "netstat", "tracert", "nslookup"],
+                kunci: "B",
+                pembahasan: "ipconfig adalah perintah di Windows untuk melihat konfigurasi IP address. Di Linux menggunakan ifconfig atau ip addr."
+            },
+            {
+                nomor: 15,
+                kd: "Memahami konsep keamanan jaringan",
+                materi: "Network Security",
+                indikator: "Peserta didik dapat menjelaskan fungsi firewall dan VPN",
+                soal: "Fungsi utama firewall dalam jaringan adalah...",
+                options: ["Mempercepat koneksi", "Memberikan IP address", "Mengamankan jaringan dari ancaman", "Routing data", "Monitoring bandwidth"],
+                kunci: "C",
+                pembahasan: "Firewall berfungsi mengamankan jaringan dengan memfilter traffic yang masuk dan keluar berdasarkan aturan keamanan yang ditetapkan."
+            },
+            {
+                nomor: 16,
+                kd: "Memahami layanan DHCP dan DNS",
+                materi: "Layanan Jaringan",
+                indikator: "Peserta didik dapat menjelaskan fungsi layanan DHCP dan DNS",
+                soal: "DNS berfungsi untuk...",
+                options: ["Memberikan IP otomatis", "Menerjemahkan domain ke IP address", "Mengamankan jaringan", "Transfer file", "Monitoring jaringan"],
+                kunci: "B",
+                pembahasan: "DNS (Domain Name System) menerjemahkan nama domain (www.google.com) menjadi IP address yang dapat dipahami komputer."
+            },
+            {
+                nomor: 17,
+                kd: "Menerapkan instalasi kabel jaringan",
+                materi: "Kabel & Media Transmisi",
+                indikator: "Peserta didik dapat menentukan standar dan spesifikasi kabel jaringan",
+                soal: "Susunan kabel straight pada standar T568B dimulai dengan warna...",
+                options: ["Putih Orange", "Putih Hijau", "Putih Biru", "Orange", "Hijau"],
+                kunci: "A",
+                pembahasan: "Urutan kabel T568B: Putih Orange, Orange, Putih Hijau, Biru, Putih Biru, Hijau, Putih Coklat, Coklat."
+            },
+            {
+                nomor: 18,
+                kd: "Memahami konsep VLAN",
+                materi: "Virtual LAN",
+                indikator: "Peserta didik dapat menjelaskan konsep dan fungsi VLAN",
+                soal: "Kepanjangan dari VLAN adalah...",
+                options: ["Virtual Local Area Network", "Verified LAN", "Variable LAN", "Visual LAN", "Vector LAN"],
+                kunci: "A",
+                pembahasan: "VLAN (Virtual Local Area Network) adalah teknologi untuk membagi jaringan fisik menjadi beberapa jaringan logis."
+            },
+            {
+                nomor: 19,
+                kd: "Memahami arsitektur TCP/IP",
+                materi: "Model TCP/IP",
+                indikator: "Peserta didik dapat mengidentifikasi layer TCP/IP dan fungsinya",
+                soal: "Layer Transport pada TCP/IP menggunakan protokol...",
+                options: ["IP dan ICMP", "TCP dan UDP", "HTTP dan FTP", "ARP dan RARP", "DNS dan DHCP"],
+                kunci: "B",
+                pembahasan: "Layer Transport menggunakan TCP (connection-oriented) dan UDP (connectionless) untuk pengiriman data."
+            },
+            {
+                nomor: 20,
+                kd: "Memahami arsitektur TCP/IP",
+                materi: "Model TCP/IP",
+                indikator: "Peserta didik dapat mengidentifikasi layer TCP/IP dan fungsinya",
+                soal: "Protokol pada layer Internet TCP/IP adalah...",
+                options: ["TCP", "UDP", "IP", "HTTP", "FTP"],
+                kunci: "C",
+                pembahasan: "IP (Internet Protocol) bekerja pada layer Internet untuk pengalamatan dan routing paket data."
+            },
+            {
+                nomor: 21,
+                kd: "Menerapkan instalasi kabel jaringan",
+                materi: "Kabel & Media Transmisi",
+                indikator: "Peserta didik dapat menentukan standar dan spesifikasi kabel jaringan",
+                soal: "Kabel crossover digunakan untuk menghubungkan...",
+                options: ["PC ke switch", "PC ke router", "PC ke PC", "Switch ke router", "PC ke modem"],
+                kunci: "C",
+                pembahasan: "Kabel crossover digunakan untuk menghubungkan perangkat sejenis seperti PC ke PC atau switch ke switch."
+            },
+            {
+                nomor: 22,
+                kd: "Menganalisis konsep bandwidth dan QoS",
+                materi: "Quality of Service",
+                indikator: "Peserta didik dapat menganalisis konsep bandwidth, QoS, dan latency",
+                soal: "Bandwidth adalah...",
+                options: ["Kecepatan processor", "Kapasitas maksimal transfer data", "Jumlah komputer dalam jaringan", "Jarak antar komputer", "Ukuran paket data"],
+                kunci: "B",
+                pembahasan: "Bandwidth adalah kapasitas maksimal transfer data dalam jaringan, biasanya diukur dalam bps (bits per second)."
+            },
+            {
+                nomor: 23,
+                kd: "Memahami NAT dan fungsinya",
+                materi: "Network Address Translation",
+                indikator: "Peserta didik dapat mengidentifikasi kepanjangan dan fungsi NAT",
+                soal: "NAT adalah singkatan dari...",
+                options: ["Network Access Technology", "Network Address Translation", "Network Application Transfer", "Network Area Topology", "Network Authentication Type"],
+                kunci: "B",
+                pembahasan: "NAT (Network Address Translation) menerjemahkan IP private menjadi IP public untuk akses internet."
+            },
+            {
+                nomor: 24,
+                kd: "Menganalisis perangkat jaringan dan fungsinya",
+                materi: "Perangkat Jaringan",
+                indikator: "Peserta didik dapat menganalisis fungsi perangkat jaringan sesuai layer OSI",
+                soal: "Router bekerja pada layer ke berapa OSI?",
+                options: ["Layer 1", "Layer 2", "Layer 3", "Layer 4", "Layer 7"],
+                kunci: "C",
+                pembahasan: "Router bekerja pada Network Layer (Layer 3) untuk melakukan routing antar network berdasarkan IP address."
+            },
+            {
+                nomor: 25,
+                kd: "Memahami konsep keamanan jaringan",
+                materi: "Network Security",
+                indikator: "Peserta didik dapat menjelaskan fungsi firewall dan VPN",
+                soal: "VPN digunakan untuk...",
+                options: ["Mempercepat internet", "Membuat koneksi aman melalui jaringan publik", "Memberikan IP address", "Monitoring jaringan", "Transfer file"],
+                kunci: "B",
+                pembahasan: "VPN (Virtual Private Network) membuat tunnel aman untuk koneksi private melalui jaringan publik dengan enkripsi."
+            },
+            {
+                nomor: 26,
+                kd: "Memahami protokol-protokol jaringan dan aplikasinya",
+                materi: "Protokol Jaringan",
+                indikator: "Peserta didik dapat mengidentifikasi protokol yang digunakan untuk layanan tertentu",
+                soal: "Port default untuk HTTPS adalah...",
+                options: ["21", "23", "80", "443", "8080"],
+                kunci: "D",
+                pembahasan: "Port 443 adalah port default untuk HTTPS (HTTP Secure) yang menggunakan enkripsi SSL/TLS."
+            },
+            {
+                nomor: 27,
+                kd: "Memahami konsep IPv6",
+                materi: "IPv6 Addressing",
+                indikator: "Peserta didik dapat menentukan jumlah bit pada IPv6",
+                soal: "IPv6 menggunakan berapa bit untuk addressing?",
+                options: ["32 bit", "64 bit", "128 bit", "256 bit", "512 bit"],
+                kunci: "C",
+                pembahasan: "IPv6 menggunakan 128 bit untuk addressing, jauh lebih banyak dari IPv4 yang hanya 32 bit."
+            },
+            {
+                nomor: 28,
+                kd: "Menganalisis perangkat jaringan dan fungsinya",
+                materi: "Perangkat Jaringan",
+                indikator: "Peserta didik dapat menganalisis fungsi perangkat jaringan sesuai layer OSI",
+                soal: "Fungsi utama hub dalam jaringan adalah...",
+                options: ["Routing data", "Filtering MAC address", "Meneruskan data ke semua port", "Mengamankan jaringan", "Memberikan IP address"],
+                kunci: "C",
+                pembahasan: "Hub meneruskan data ke semua port tanpa filtering. Hub bekerja pada Physical Layer dan tidak intelligent seperti switch."
+            },
+            {
+                nomor: 29,
+                kd: "Menerapkan instalasi kabel jaringan",
+                materi: "Kabel & Media Transmisi",
+                indikator: "Peserta didik dapat menentukan standar dan spesifikasi kabel jaringan",
+                soal: "Jarak maksimal kabel UTP tanpa repeater adalah...",
+                options: ["50 meter", "100 meter", "150 meter", "200 meter", "500 meter"],
+                kunci: "B",
+                pembahasan: "Jarak maksimal kabel UTP adalah 100 meter untuk menjaga kualitas sinyal. Di atas itu diperlukan repeater atau switch."
+            },
+            {
+                nomor: 30,
+                kd: "Menganalisis konsep bandwidth dan QoS",
+                materi: "Quality of Service",
+                indikator: "Peserta didik dapat menganalisis konsep bandwidth, QoS, dan latency",
+                soal: "Latency dalam jaringan adalah...",
+                options: ["Kecepatan maksimal", "Waktu tunda pengiriman data", "Jumlah data yang dikirim", "Jarak antar komputer", "Kapasitas bandwidth"],
+                kunci: "B",
+                pembahasan: "Latency adalah waktu tunda yang diperlukan data untuk berpindah dari sumber ke tujuan, biasanya diukur dalam milidetik (ms)."
+            },
+            {
+                nomor: 31,
+                kd: "Memahami teknologi wireless",
+                materi: "Jaringan Nirkabel",
+                indikator: "Peserta didik dapat mengidentifikasi standar dan metode akses WiFi",
+                soal: "Metode keamanan terbaik untuk WiFi saat ini adalah...",
+                options: ["WEP", "WPA", "WPA2", "WPA3", "Open Network"],
+                kunci: "D",
+                pembahasan: "WPA3 adalah standar keamanan WiFi terbaru dan paling aman, menggantikan WPA2 dengan enkripsi yang lebih kuat."
+            },
+            {
+                nomor: 32,
+                kd: "Menganalisis konsep load balancing",
+                materi: "Load Balancing",
+                indikator: "Peserta didik dapat menganalisis fungsi load balancing",
+                soal: "Load balancing berfungsi untuk...",
+                options: ["Mengamankan jaringan", "Membagi beban traffic ke beberapa server", "Memberikan IP address", "Monitoring bandwidth", "Routing data"],
+                kunci: "B",
+                pembahasan: "Load balancing mendistribusikan traffic jaringan ke beberapa server untuk optimasi performa dan keandalan sistem."
+            },
+            {
+                nomor: 33,
+                kd: "Memahami protokol-protokol jaringan dan aplikasinya",
+                materi: "Protokol Jaringan",
+                indikator: "Peserta didik dapat mengidentifikasi protokol yang digunakan untuk layanan tertentu",
+                soal: "Protokol untuk remote access ke server adalah...",
+                options: ["FTP", "HTTP", "SMTP", "SSH", "DNS"],
+                kunci: "D",
+                pembahasan: "SSH (Secure Shell) adalah protokol untuk remote access yang aman ke server dengan enkripsi. Port default SSH adalah 22."
+            },
+            {
+                nomor: 34,
+                kd: "Memahami teknologi wireless",
+                materi: "Jaringan Nirkabel",
+                indikator: "Peserta didik dapat mengidentifikasi standar dan metode akses WiFi",
+                soal: "SSID pada WiFi adalah...",
+                options: ["Password WiFi", "Nama jaringan WiFi", "IP address router", "MAC address", "Channel WiFi"],
+                kunci: "B",
+                pembahasan: "SSID (Service Set Identifier) adalah nama jaringan WiFi yang ditampilkan dan digunakan untuk identifikasi access point."
+            },
+            {
+                nomor: 35,
+                kd: "Memahami layanan proxy dan monitoring",
+                materi: "Network Services",
+                indikator: "Peserta didik dapat menjelaskan fungsi proxy server dan SNMP",
+                soal: "Fungsi proxy server adalah...",
+                options: ["Memberikan IP address", "Perantara antara client dan internet", "Routing data", "Mengamankan password", "Transfer file"],
+                kunci: "B",
+                pembahasan: "Proxy server bertindak sebagai perantara antara client dan internet, dapat digunakan untuk filtering, caching, dan keamanan."
+            },
+            {
+                nomor: 36,
+                kd: "Memahami layanan proxy dan monitoring",
+                materi: "Network Services",
+                indikator: "Peserta didik dapat menjelaskan fungsi proxy server dan SNMP",
+                soal: "SNMP digunakan untuk...",
+                options: ["Mengirim email", "Monitoring dan management perangkat jaringan", "Transfer file", "Remote access", "Web browsing"],
+                kunci: "B",
+                pembahasan: "SNMP (Simple Network Management Protocol) digunakan untuk monitoring dan management perangkat jaringan seperti router, switch, dan server."
+            },
+            {
+                nomor: 37,
+                kd: "Menerapkan konsep IP Address dan subnet mask",
+                materi: "IP Address & Subnetting",
+                indikator: "Disajikan IP address, peserta didik dapat menentukan kelas dan subnet mask yang sesuai",
+                soal: "IP address yang termasuk IP private adalah...",
+                options: ["8.8.8.8", "192.168.1.1", "1.1.1.1", "200.100.50.25", "123.45.67.89"],
+                kunci: "B",
+                pembahasan: "192.168.1.1 adalah IP private kelas C. Range IP private: 10.0.0.0-10.255.255.255, 172.16.0.0-172.31.255.255, 192.168.0.0-192.168.255.255."
+            },
+            {
+                nomor: 38,
+                kd: "Menganalisis konsep bandwidth dan QoS",
+                materi: "Quality of Service",
+                indikator: "Peserta didik dapat menganalisis konsep bandwidth, QoS, dan latency",
+                soal: "QoS (Quality of Service) berfungsi untuk...",
+                options: ["Mengamankan jaringan", "Memberikan IP address", "Mengatur prioritas traffic jaringan", "Transfer file", "Routing data"],
+                kunci: "C",
+                pembahasan: "QoS mengatur prioritas traffic untuk memastikan layanan penting (VoIP, video) mendapat bandwidth yang cukup."
+            },
+            {
+                nomor: 39,
+                kd: "Memahami protokol routing",
+                materi: "Spanning Tree Protocol",
+                indikator: "Peserta didik dapat mengidentifikasi protokol STP",
+                soal: "STP (Spanning Tree Protocol) berfungsi untuk...",
+                options: ["Routing data", "Mencegah loop pada jaringan switch", "Memberikan IP address", "Keamanan jaringan", "Transfer file"],
+                kunci: "B",
+                pembahasan: "STP mencegah terjadinya loop pada jaringan yang memiliki redundant link antara switch dengan memblok jalur yang berpotensi loop."
+            },
+            {
+                nomor: 40,
+                kd: "Memahami klasifikasi jaringan berdasarkan area",
+                materi: "Jenis-jenis Jaringan",
+                indikator: "Peserta didik dapat mengidentifikasi jenis jaringan MAN",
+                soal: "MAN (Metropolitan Area Network) adalah jaringan yang mencakup...",
+                options: ["Satu ruangan", "Satu gedung", "Satu kota", "Satu negara", "Seluruh dunia"],
+                kunci: "C",
+                pembahasan: "MAN mencakup area satu kota atau kampus besar, lebih luas dari LAN tetapi lebih kecil dari WAN."
+            },
+            {
+                nomor: 41,
+                kd: "Menganalisis topologi jaringan",
+                materi: "Analisis Topologi",
+                indikator: "Peserta didik dapat menganalisis kelebihan dan kekurangan topologi jaringan",
+                soal: "Jelaskan perbedaan antara topologi star dan topologi bus beserta kelebihan dan kekurangan masing-masing!",
+                type: "essay",
+                kunci: "Topologi Star:\n• Kelebihan: Mudah troubleshooting, kerusakan pada satu node tidak mempengaruhi node lain, mudah menambah/mengurangi node\n• Kekurangan: Membutuhkan banyak kabel, jika hub/switch rusak seluruh jaringan down, biaya lebih mahal\n\nTopologi Bus:\n• Kelebihan: Hemat kabel, biaya lebih murah, mudah dikembangkan\n• Kekurangan: Jika kabel backbone putus seluruh jaringan down, sulit troubleshooting, collision tinggi pada traffic padat"
+            },
+            {
+                nomor: 42,
+                kd: "Menerapkan subnetting pada jaringan",
+                materi: "Subnetting",
+                indikator: "Disajikan kasus, peserta didik dapat menghitung pembagian subnet",
+                soal: "Apa yang dimaksud dengan subnetting? Berikan contoh perhitungan subnetting untuk network 192.168.10.0/24 yang dibagi menjadi 4 subnet!",
+                type: "essay",
+                kunci: "Subnetting adalah teknik membagi satu network menjadi beberapa subnetwork yang lebih kecil.\n\nContoh 192.168.10.0/24 dibagi 4 subnet:\n• Butuh 2 bit (2² = 4 subnet)\n• Subnet mask baru: /26 atau 255.255.255.192\n• Subnet 1: 192.168.10.0/26 (host: 1-62, broadcast: 63)\n• Subnet 2: 192.168.10.64/26 (host: 65-126, broadcast: 127)\n• Subnet 3: 192.168.10.128/26 (host: 129-190, broadcast: 191)\n• Subnet 4: 192.168.10.192/26 (host: 193-254, broadcast: 255)"
+            },
+            {
+                nomor: 43,
+                kd: "Membandingkan protokol TCP dan UDP",
+                materi: "Transport Protocol",
+                indikator: "Peserta didik dapat membandingkan karakteristik TCP dan UDP beserta contoh aplikasinya",
+                soal: "Jelaskan perbedaan antara protokol TCP dan UDP beserta contoh aplikasi yang menggunakan masing-masing protokol!",
+                type: "essay",
+                kunci: "TCP (Transmission Control Protocol):\n• Connection-oriented (butuh handshake)\n• Reliable (ada acknowledgment)\n• Flow control dan error checking\n• Lebih lambat tapi data terjamin sampai\n• Contoh: HTTP, FTP, SMTP, SSH\n\nUDP (User Datagram Protocol):\n• Connectionless (tidak butuh handshake)\n• Unreliable (tidak ada acknowledgment)\n• Tidak ada flow control\n• Lebih cepat tapi data bisa hilang\n• Contoh: DNS, DHCP, streaming video, VoIP, online gaming"
+            },
+            {
+                nomor: 44,
+                kd: "Memahami model referensi OSI secara menyeluruh",
+                materi: "7 Layer OSI",
+                indikator: "Peserta didik dapat menjelaskan fungsi setiap layer OSI",
+                soal: "Sebutkan dan jelaskan fungsi dari 7 layer OSI secara lengkap!",
+                type: "essay",
+                kunci: "7 Layer OSI dari bawah ke atas:\n\n1. Physical Layer: Transmisi bit mentah melalui media fisik (kabel, wireless)\n2. Data Link Layer: Pengalamatan MAC, frame, error detection (Switch, NIC)\n3. Network Layer: Routing, pengalamatan IP, logical addressing (Router)\n4. Transport Layer: Segmentasi data, flow control, error recovery (TCP/UDP)\n5. Session Layer: Membuat, mengelola, mengakhiri sesi komunikasi\n6. Presentation Layer: Enkripsi, kompresi, translasi format data\n7. Application Layer: Interface dengan user, protokol aplikasi (HTTP, FTP, SMTP)"
+            },
+            {
+                nomor: 45,
+                kd: "Menganalisis implementasi VLAN",
+                materi: "VLAN Implementation",
+                indikator: "Peserta didik dapat menganalisis konsep dan manfaat VLAN dalam jaringan perusahaan",
+                soal: "Jelaskan konsep VLAN dan sebutkan minimal 4 manfaat implementasi VLAN dalam jaringan perusahaan!",
+                type: "essay",
+                kunci: "VLAN (Virtual Local Area Network) adalah teknologi untuk membagi satu jaringan fisik menjadi beberapa jaringan logis yang terpisah.\n\nManfaat VLAN:\n1. Segmentasi jaringan: Memisahkan traffic berdasarkan departemen/fungsi\n2. Keamanan: Isolasi antar VLAN meningkatkan security\n3. Efisiensi bandwidth: Mengurangi broadcast domain\n4. Fleksibilitas: Mudah reorganisasi tanpa ubah infrastruktur fisik\n5. Manajemen lebih mudah: Kontrol akses dan policy per VLAN\n6. Cost effective: Tidak perlu switch terpisah untuk tiap departemen"
+            }
+        ];
+
+        async function onConfigChange(config) {
+            document.getElementById('kisiSchool').textContent = config.school_name || defaultConfig.school_name;
+            document.getElementById('kisiSubject').textContent = config.subject || defaultConfig.subject;
+            document.getElementById('kisiGrade').textContent = config.grade || defaultConfig.grade;
+            document.getElementById('kisiTeacher').textContent = config.teacher_name || defaultConfig.teacher_name;
+            document.getElementById('kisiYear').textContent = `TAHUN PELAJARAN ${config.year || defaultConfig.year}`;
+            document.getElementById('signatureTeacher').textContent = config.teacher_name || defaultConfig.teacher_name;
+            
+            const today = new Date();
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            document.getElementById('signatureDate').textContent = `Rancakalong, ${today.getDate()} ${months[today.getMonth()]} ${today.getFullYear()}`;
+        }
+
+        function populateKisiTable() {
+            const tbody = document.getElementById('kisiTableBody');
+            tbody.innerHTML = '';
+
+            kisiKisiData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="center">${item.no}</td>
+                    <td>${item.kd}</td>
+                    <td>${item.materi}</td>
+                    <td>${item.indikator}</td>
+                    <td class="center">${item.level}</td>
+                    <td class="center">${item.bentuk}</td>
+                    <td class="center">${item.nomor}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function populateKartuSoal() {
+            const container = document.getElementById('kartuSoalContainer');
+            container.innerHTML = '';
+
+            const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
+
+            kartuSoalData.forEach(item => {
+                const kartu = document.createElement('div');
+                kartu.className = 'kartu-soal';
+                
+                const optionsHTML = item.type === 'essay' ? '' : `
+                    <div class="kartu-section">
+                        <h3>PILIHAN JAWABAN</h3>
+                        <div class="content">
+                            <ul class="options-list">
+                                ${item.options.map((opt, idx) => `
+                                    <li>${String.fromCharCode(65 + idx)}. ${opt}</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+                kartu.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 15px;">
+                        <h2 style="margin: 0; font-size: 16px;">KARTU SOAL ${item.type === 'essay' ? 'ESSAY' : 'PILIHAN GANDA'}</h2>
+                        <p style="margin: 5px 0; font-size: 14px;">${config.school_name || defaultConfig.school_name}</p>
+                    </div>
+
+                    <div class="kartu-header">
+                        <div>
+                            <div class="kartu-field">
+                                <span class="label">Mata Pelajaran</span>
+                                <span class="colon">:</span>
+                                <span class="value">${config.subject || defaultConfig.subject}</span>
+                            </div>
+                            <div class="kartu-field">
+                                <span class="label">Kelas/Semester</span>
+                                <span class="colon">:</span>
+                                <span class="value">${config.grade || defaultConfig.grade}</span>
+                            </div>
+                            <div class="kartu-field">
+                                <span class="label">Kurikulum</span>
+                                <span class="colon">:</span>
+                                <span class="value">Kurikulum Merdeka</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="kartu-field">
+                                <span class="label">Bentuk Soal</span>
+                                <span class="colon">:</span>
+                                <span class="value">${item.type === 'essay' ? 'Essay' : 'Pilihan Ganda'}</span>
+                            </div>
+                            <div class="kartu-field">
+                                <span class="label">Nomor Soal</span>
+                                <span class="colon">:</span>
+                                <span class="value">${item.nomor}</span>
+                            </div>
+                            <div class="kartu-field">
+                                <span class="label">Penyusun</span>
+                                <span class="colon">:</span>
+                                <span class="value">${config.teacher_name || defaultConfig.teacher_name}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kartu-section">
+                        <h3>KOMPETENSI DASAR</h3>
+                        <div class="content">${item.kd}</div>
+                    </div>
+
+                    <div class="kartu-section">
+                        <h3>MATERI POKOK</h3>
+                        <div class="content">${item.materi}</div>
+                    </div>
+
+                    <div class="kartu-section">
+                        <h3>INDIKATOR SOAL</h3>
+                        <div class="content">${item.indikator}</div>
+                    </div>
+
+                    <div class="kartu-section">
+                        <h3>SOAL</h3>
+                        <div class="content">${item.soal}</div>
+                    </div>
+
+                    ${optionsHTML}
+
+                    <div class="kartu-section">
+                        <h3>KUNCI JAWABAN</h3>
+                        <div class="content">
+                            <div class="answer-key">
+                                <strong>Jawaban: ${item.kunci}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kartu-section">
+                        <h3>PEMBAHASAN</h3>
+                        <div class="content" style="white-space: pre-line;">${item.pembahasan || item.kunci}</div>
+                    </div>
+                `;
+
+                container.appendChild(kartu);
+            });
+        }
+
+        function showSection(section) {
+            const kisiSection = document.getElementById('kisiSection');
+            const kartuSection = document.getElementById('kartuSection');
+            const buttons = document.querySelectorAll('.nav-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            if (section === 'kisi') {
+                kisiSection.style.display = 'block';
+                kartuSection.style.display = 'none';
+                buttons[0].classList.add('active');
+            } else if (section === 'kartu') {
+                kisiSection.style.display = 'none';
+                kartuSection.style.display = 'block';
+                buttons[1].classList.add('active');
+                populateKartuSoal();
+            }
+        }
+
+        function printDocument() {
+            window.print();
+        }
+
+        async function init() {
+            if (window.elementSdk) {
+                await window.elementSdk.init({
+                    defaultConfig,
+                    onConfigChange,
+                    mapToCapabilities: (config) => ({
+                        recolorables: [],
+                        borderables: [],
+                        fontEditable: undefined,
+                        fontSizeable: undefined
+                    }),
+                    mapToEditPanelValues: (config) => new Map([
+                        ["school_name", config.school_name || defaultConfig.school_name],
+                        ["subject", config.subject || defaultConfig.subject],
+                        ["grade", config.grade || defaultConfig.grade],
+                        ["teacher_name", config.teacher_name || defaultConfig.teacher_name],
+                        ["year", config.year || defaultConfig.year]
+                    ])
+                });
+
+                await onConfigChange(window.elementSdk.config);
+            } else {
+                await onConfigChange(defaultConfig);
+            }
+
+            populateKisiTable();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a82f073a4030bfb',t:'MTc2NDc2MzYwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

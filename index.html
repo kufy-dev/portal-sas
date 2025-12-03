@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal SAS & Kisi-Kisi Ujian</title>
+    <!-- Font Awesome untuk Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts mirip Ruang GTK -->
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* RESET & DASAR */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* NAVBAR STYLE (Ruang GTK Style) */
+        .navbar {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a73e8; /* Warna Biru Khas Google/Edu */
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: #5f6368;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+            color: white;
+            margin-bottom: -40px; /* Overlap effect */
+            padding-bottom: 80px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* GRID MENU (Kartu Mapel) */
+        .menu-section {
+            padding-bottom: 60px;
+        }
+
+        .sas-grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: -40px; /* Naik ke atas menutupi Hero */
+        }
+
+        .sas-item {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            text-decoration: none !important;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .sas-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .sas-header-color {
+            height: 6px;
+            width: 100%;
+        }
+
+        .sas-content {
+            padding: 30px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sas-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .sas-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #202124;
+            margin-bottom: 10px;
+        }
+
+        .sas-desc {
+            font-size: 0.95rem;
+            color: #5f6368;
+            margin-bottom: 25px;
+        }
+
+        .sas-action {
+            margin-top: auto;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: #f1f3f4;
+            color: #1a73e8;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .sas-item:hover .sas-action {
+            background: #1a73e8;
+            color: #fff;
+        }
+
+        /* WARNA TEMA MAPEL */
+        /* Informatika - Biru */
+        .inf-theme .sas-header-color { background: #1a73e8; }
+        .inf-theme .sas-icon-wrapper { color: #1a73e8; background: #e8f0fe; }
+
+        /* Desain Grafis - Hijau Teal */
+        .ddg-theme .sas-header-color { background: #009688; }
+        .ddg-theme .sas-icon-wrapper { color: #009688; background: #e0f2f1; }
+
+        /* TLJ - Orange/Merah */
+        .tlj-theme .sas-header-color { background: #ea4335; }
+        .tlj-theme .sas-icon-wrapper { color: #ea4335; background: #fce8e6; }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero { padding: 40px 20px 80px 20px; }
+            .hero h1 { font-size: 1.8rem; }
+            .sas-grid-container { gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-graduation-cap"></i>
+                Portal SAS <span>Online</span>
+            </a>
+            <!-- Bisa tambah menu kanan disini jika perlu -->
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <h1>Sumatif Akhir Semester (SAS)</h1>
+            <p>Akses Kisi-kisi, Kartu Soal, dan Materi Ujian Semester Genap/Ganjil secara online dan responsif.</p>
+        </div>
+    </section>
+
+    <!-- MENU KARTU MAPEL -->
+    <section class="menu-section">
+        <div class="container">
+            <div class="sas-grid-container">
+
+                <!-- 1. INFORMATIKA -->
+                <!-- Pastikan nama file sesuai: inf.html -->
+                <a href="inf.html" class="sas-item inf-theme">
+                    <div class="sas-header-color"></div>
+                    <div class="sas-content">
+                        <div class="sas-icon-wrapper">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <h3 class="sas-title">Informatika</h3>
+                        <p class="sas-desc">Akses Kisi-kisi, Kartu Soal, dan Modul Ajar Informatika Fase E/F.</p>
+                        <span class="sas-action">Buka Dokumen <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <!-- 2. DESAIN GRAFIS -->
+                <!-- Pastikan nama file sesuai: ddg.html -->
+                <a href="ddg.html" class="sas-item ddg-theme">
+                    <div class="sas-header-color"></div>
+                    <div class="sas-content">
+                        <div class="sas-icon-wrapper">
+                            <i class="fa-solid fa-palette"></i>
+                        </div>
+                        <h3 class="sas-title">Desain Grafis</h3>
+                        <p class="sas-desc">Dokumen ujian Dasar Desain Grafis, Nirmana, dan pewarnaan.</p>
+                        <span class="sas-action">Buka Dokumen <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+                <!-- 3. TLJ -->
+                <!-- Pastikan nama file sesuai: tlj.html -->
+                <a href="tlj.html" class="sas-item tlj-theme">
+                    <div class="sas-header-color"></div>
+                    <div class="sas-content">
+                        <div class="sas-icon-wrapper">
+                            <i class="fa-solid fa-network-wired"></i>
+                        </div>
+                        <h3 class="sas-title">Teknologi Jaringan</h3>
+                        <p class="sas-desc">Materi dan Soal Teknologi Layanan Jaringan (TLJ) & Infrastruktur.</p>
+                        <span class="sas-action">Buka Dokumen <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            &copy; 2025 Portal Sumatif Akhir Semester. Template Style by Kufy-Dev (Lutfi Maulana, S.Tr.T., Gr.
+        </div>
+    </footer>
+
+</body>
+</html>

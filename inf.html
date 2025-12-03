@@ -1,0 +1,1429 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kisi-kisi dan Kartu Soal ANBK - Informatika</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Arial', 'Segoe UI', sans-serif;
+        }
+        
+        .a4-page {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+            padding: 20mm;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .anbk-header-doc {
+            border: 3px solid #1e3a8a;
+            padding: 16px;
+            margin-bottom: 24px;
+            background: linear-gradient(to right, #eff6ff, #dbeafe);
+        }
+        
+        .document-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .document-table th,
+        .document-table td {
+            border: 1px solid #1e3a8a;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .document-table th {
+            background: #1e40af;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .card-soal {
+            border: 3px solid #1e3a8a;
+            padding: 20px;
+            margin-bottom: 32px;
+            page-break-inside: avoid;
+            background: white;
+        }
+        
+        .card-header {
+            background: #1e40af;
+            color: white;
+            padding: 12px;
+            margin: -20px -20px 16px -20px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+        
+        .soal-box {
+            border: 2px solid #3b82f6;
+            padding: 16px;
+            background: #eff6ff;
+            margin: 16px 0;
+        }
+        
+        .option-item {
+            padding: 8px;
+            margin: 4px 0;
+            border-left: 3px solid #3b82f6;
+            padding-left: 12px;
+        }
+        
+        .kunci-jawaban {
+            background: #dcfce7;
+            border: 2px solid #16a34a;
+            padding: 12px;
+            margin-top: 16px;
+            font-weight: bold;
+        }
+        
+        .pembahasan-box {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            padding: 12px;
+            margin-top: 12px;
+        }
+        
+        .signature-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .signature-box {
+            text-align: center;
+        }
+        
+        .signature-line {
+            border-bottom: 2px solid #000;
+            margin-top: 80px;
+            margin-bottom: 8px;
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            border: none;
+            background: #e5e7eb;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        .tab-button.active {
+            background: #1e40af;
+            color: white;
+        }
+        
+        .tab-button:hover {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .print-button {
+            background: #16a34a;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        .print-button:hover {
+            background: #15803d;
+            transform: scale(1.05);
+        }
+        
+        .level-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .level-c1 { background: #dbeafe; color: #1e40af; }
+        .level-c2 { background: #fef3c7; color: #92400e; }
+        .level-c3 { background: #fecaca; color: #991b1b; }
+        .level-c4 { background: #e9d5ff; color: #6b21a8; }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .a4-page {
+                box-shadow: none;
+                max-width: 100%;
+                padding: 15mm;
+            }
+            
+            .card-soal {
+                page-break-inside: avoid;
+                page-break-after: always;
+            }
+            
+            @page {
+                size: A4;
+                margin: 15mm;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="bg-gray-100 min-h-full">
+  <div class="w-full bg-white"><!-- Control Panel -->
+   <div class="no-print bg-gradient-to-r from-blue-900 to-blue-700 text-white p-6 sticky top-0 z-50 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+     <div>
+      <h1 class="text-2xl font-bold">KISI-KISI &amp; KARTU SOAL ANBK</h1>
+      <p class="text-blue-200">Mata Pelajaran Informatika - Format Resmi</p>
+     </div><button onclick="handlePrint()" class="print-button"> <span>🖨️ CETAK DOKUMEN</span> </button>
+    </div>
+   </div><!-- Tab Navigation -->
+   <div class="no-print container mx-auto mt-6">
+    <div class="flex gap-2 border-b-2 border-gray-300"><button class="tab-button active" onclick="switchTab('kisi-kisi')"> 📋 KISI-KISI SOAL </button> <button class="tab-button" onclick="switchTab('kartu-pg')"> 📝 KARTU SOAL PILIHAN GANDA </button> <button class="tab-button" onclick="switchTab('kartu-essay')"> ✍️ KARTU SOAL URAIAN </button>
+    </div>
+   </div><!-- KISI-KISI SECTION -->
+   <div id="kisi-kisi-section" class="container mx-auto py-8">
+    <div class="a4-page">
+     <div class="anbk-header-doc">
+      <div class="text-center mb-4">
+       <h1 class="text-2xl font-bold text-blue-900">KISI-KISI SOAL</h1>
+       <h2 class="text-xl font-bold text-blue-800">ASESMEN BERBASIS KOMPUTER</h2>
+      </div>
+      <table class="w-full text-sm" style="border: none;">
+       <tbody>
+        <tr style="border: none;">
+         <td style="border: none; padding: 4px; width: 180px;">Nama Sekolah</td>
+         <td style="border: none; padding: 4px;">: <span id="school-kisi">SMK CENDIKIA RANCAKALONG</span></td>
+        </tr>
+        <tr style="border: none;">
+         <td style="border: none; padding: 4px;">Mata Pelajaran</td>
+         <td style="border: none; padding: 4px;">: Informatika</td>
+        </tr>
+        <tr style="border: none;">
+         <td style="border: none; padding: 4px;">Kelas/Semester</td>
+         <td style="border: none; padding: 4px;">: X / 1 (Ganjil)</td>
+        </tr>
+        <tr style="border: none;">
+         <td style="border: none; padding: 4px;">Kurikulum</td>
+         <td style="border: none; padding: 4px;">: Kurikulum Merdeka</td>
+        </tr>
+        <tr style="border: none;">
+         <td style="border: none; padding: 4px;">Jumlah Soal</td>
+         <td style="border: none; padding: 4px;">: 45 Soal (40 Pilihan Ganda + 5 Essay)</td>
+        </tr>
+        <tr style="border: none;">
+         <td style="border: none; padding: 4px;">Bentuk Soal</td>
+         <td style="border: none; padding: 4px;">: Pilihan Ganda dan Essay</td>
+        </tr>
+        <tr style="border: none;">
+         <td style="border: none; padding: 4px;">Alokasi Waktu</td>
+         <td style="border: none; padding: 4px;">: 90 Menit</td>
+        </tr>
+        <tr style="border: none;">
+         <td style="border: none; padding: 4px;">Penyusun</td>
+         <td style="border: none; padding: 4px;">: <span id="teacher-kisi">Lutfi Maulana, S.Tr.T., Gr.</span></td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+     <table class="document-table text-sm">
+      <thead>
+       <tr>
+        <th style="width: 30px;">No</th>
+        <th style="width: 200px;">Kompetensi Dasar</th>
+        <th style="width: 200px;">Indikator Pencapaian</th>
+        <th style="width: 120px;">Materi Pokok</th>
+        <th style="width: 60px;">Level</th>
+        <th style="width: 80px;">No Soal</th>
+        <th style="width: 60px;">Bentuk</th>
+       </tr>
+      </thead>
+      <tbody id="kisi-table-body"><!-- Data akan diisi oleh JavaScript -->
+      </tbody>
+     </table>
+     <div class="mt-8">
+      <h3 class="font-bold text-lg mb-4 text-blue-900">SEBARAN SOAL BERDASARKAN LEVEL KOGNITIF</h3>
+      <table class="document-table">
+       <thead>
+        <tr>
+         <th>Level Kognitif</th>
+         <th>Deskripsi</th>
+         <th>Jumlah PG</th>
+         <th>Jumlah Uraian</th>
+         <th>Total</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td class="font-bold">C1 (Mengingat)</td>
+         <td>Mengidentifikasi, menyebutkan, mengenal</td>
+         <td class="text-center">15</td>
+         <td class="text-center">0</td>
+         <td class="text-center font-bold">15</td>
+        </tr>
+        <tr>
+         <td class="font-bold">C2 (Memahami)</td>
+         <td>Menjelaskan, menguraikan, membedakan</td>
+         <td class="text-center">15</td>
+         <td class="text-center">2</td>
+         <td class="text-center font-bold">17</td>
+        </tr>
+        <tr>
+         <td class="font-bold">C3 (Menerapkan)</td>
+         <td>Menggunakan, mendemonstrasikan, merancang</td>
+         <td class="text-center">8</td>
+         <td class="text-center">1</td>
+         <td class="text-center font-bold">9</td>
+        </tr>
+        <tr>
+         <td class="font-bold">C4 (Menganalisis)</td>
+         <td>Menganalisis, membandingkan, menghubungkan</td>
+         <td class="text-center">2</td>
+         <td class="text-center">2</td>
+         <td class="text-center font-bold">4</td>
+        </tr>
+        <tr style="background: #dbeafe;">
+         <td colspan="2" class="font-bold text-center">TOTAL</td>
+         <td class="text-center font-bold">40</td>
+         <td class="text-center font-bold">5</td>
+         <td class="text-center font-bold text-lg">45</td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+     <div class="signature-section">
+      <div class="signature-box">
+       <p class="font-bold">Mengetahui,</p>
+       <p class="font-bold">Kepala Sekolah</p>
+       <div class="signature-line"></div>
+       <p class="font-bold" id="principal-kisi"></p>
+       <p>NIP. ...........................</p>
+      </div>
+      <div class="signature-box">
+       <p>Rancakalong, 03 Desember 2024</p>
+       <p class="font-bold">Guru Mata Pelajaran</p>
+       <div class="signature-line"></div>
+       <p class="font-bold" id="teacher-sign-kisi">Lutfi Maulana, S.Tr.T., Gr.</p>
+       <p>NIP. ...........................</p>
+      </div>
+     </div>
+    </div>
+   </div><!-- KARTU SOAL PILIHAN GANDA SECTION -->
+   <div id="kartu-pg-section" class="container mx-auto py-8" style="display: none;">
+    <div id="kartu-pg-container"><!-- Kartu soal PG akan diisi oleh JavaScript -->
+    </div>
+   </div><!-- KARTU SOAL URAIAN SECTION -->
+   <div id="kartu-essay-section" class="container mx-auto py-8" style="display: none;">
+    <div id="kartu-essay-container"><!-- Kartu soal uraian akan diisi oleh JavaScript -->
+    </div>
+   </div>
+  </div>
+  <script>
+        const defaultConfig = {
+            school_name: "SMK CENDIKIA RANCAKALONG",
+            teacher_name: "Lutfi Maulana, S.Tr.T., Gr."
+        };
+
+        let config = { ...defaultConfig };
+
+        // Data Kisi-kisi
+        const kisiData = [
+            { no: 1, kd: "Memahami konsep dasar komputer", indikator: "Mengidentifikasi komponen hardware komputer", materi: "Perangkat Keras", level: "C1", noSoal: "1, 3, 18", bentuk: "PG" },
+            { no: 2, kd: "Memahami sistem bilangan", indikator: "Menerapkan konversi sistem bilangan", materi: "Sistem Bilangan", level: "C2", noSoal: "2, 19", bentuk: "PG" },
+            { no: 3, kd: "Memahami bahasa pemrograman", indikator: "Mengidentifikasi berbagai bahasa pemrograman", materi: "Pemrograman", level: "C1", noSoal: "4, 22, 28", bentuk: "PG" },
+            { no: 4, kd: "Memahami jaringan komputer", indikator: "Menganalisis topologi dan protokol jaringan", materi: "Jaringan", level: "C2", noSoal: "5, 7, 15, 21", bentuk: "PG" },
+            { no: 5, kd: "Memahami sistem operasi", indikator: "Menjelaskan fungsi sistem operasi", materi: "Sistem Operasi", level: "C2", noSoal: "6, 37", bentuk: "PG" },
+            { no: 6, kd: "Memahami perangkat lunak", indikator: "Mengidentifikasi jenis-jenis software", materi: "Software", level: "C1", noSoal: "9, 16, 20", bentuk: "PG" },
+            { no: 7, kd: "Memahami struktur data", indikator: "Menerapkan konsep struktur data", materi: "Algoritma", level: "C3", noSoal: "8, 11, 12, 25", bentuk: "PG" },
+            { no: 8, kd: "Memahami web development", indikator: "Mengidentifikasi teknologi web", materi: "Web", level: "C1", noSoal: "10, 13, 27", bentuk: "PG" },
+            { no: 9, kd: "Memahami keamanan komputer", indikator: "Menjelaskan konsep keamanan data", materi: "Keamanan", level: "C2", noSoal: "17, 21", bentuk: "PG" },
+            { no: 10, kd: "Memahami input/output", indikator: "Mengidentifikasi perangkat I/O", materi: "Perangkat I/O", level: "C1", noSoal: "14, 23, 38", bentuk: "PG" },
+            { no: 11, kd: "Memahami database", indikator: "Mengidentifikasi DBMS", materi: "Database", level: "C1", noSoal: "16, 34", bentuk: "PG" },
+            { no: 12, kd: "Memahami memory", indikator: "Membedakan jenis-jenis memory", materi: "Memory", level: "C2", noSoal: "26, 29", bentuk: "PG" },
+            { no: 13, kd: "Memahami jaringan internet", indikator: "Menjelaskan protokol internet", materi: "Internet", level: "C2", noSoal: "24, 30, 33", bentuk: "PG" },
+            { no: 14, kd: "Memahami algoritma sorting", indikator: "Menerapkan algoritma pengurutan", materi: "Sorting", level: "C3", noSoal: "31", bentuk: "PG" },
+            { no: 15, kd: "Memahami multimedia", indikator: "Mengidentifikasi format file", materi: "Multimedia", level: "C1", noSoal: "32, 39", bentuk: "PG" },
+            { no: 16, kd: "Memahami jaringan hardware", indikator: "Mengidentifikasi perangkat jaringan", materi: "Hardware Jaringan", level: "C1", noSoal: "35", bentuk: "PG" },
+            { no: 17, kd: "Memahami user interface", indikator: "Menjelaskan konsep GUI", materi: "User Interface", level: "C2", noSoal: "36", bentuk: "PG" },
+            { no: 18, kd: "Memahami file format", indikator: "Mengidentifikasi format dokumen", materi: "Format File", level: "C1", noSoal: "39", bentuk: "PG" },
+            { no: 19, kd: "Memahami bahasa web", indikator: "Mengidentifikasi bahasa scripting web", materi: "Web Scripting", level: "C1", noSoal: "40", bentuk: "PG" },
+            { no: 20, kd: "Menganalisis konsep komputer", indikator: "Membandingkan hardware-software", materi: "Konsep Dasar", level: "C4", noSoal: "41", bentuk: "Uraian" },
+            { no: 21, kd: "Menerapkan algoritma", indikator: "Merancang algoritma sederhana", materi: "Algoritma", level: "C3", noSoal: "42", bentuk: "Uraian" },
+            { no: 22, kd: "Menganalisis jaringan", indikator: "Menjelaskan manfaat jaringan", materi: "Jaringan", level: "C2", noSoal: "43", bentuk: "Uraian" },
+            { no: 23, kd: "Memahami sistem database", indikator: "Menjelaskan komponen database", materi: "Database", level: "C2", noSoal: "44", bentuk: "Uraian" },
+            { no: 24, kd: "Membandingkan sistem operasi", indikator: "Menganalisis perbedaan OS", materi: "Sistem Operasi", level: "C4", noSoal: "45", bentuk: "Uraian" }
+        ];
+
+        // Data Soal Pilihan Ganda (40 soal)
+        const soalPG = [
+            {
+                no: 1,
+                kd: "Memahami konsep dasar komputer",
+                indikator: "Mengidentifikasi komponen hardware komputer",
+                materi: "Perangkat Keras Komputer",
+                level: "C1",
+                soal: "Apa kepanjangan dari CPU?",
+                options: [
+                    "Central Processing Unit",
+                    "Computer Processing Unit",
+                    "Central Program Unit",
+                    "Computer Program Unit",
+                    "Central Performance Unit"
+                ],
+                kunci: "A",
+                pembahasan: "CPU adalah singkatan dari Central Processing Unit, yaitu unit pemrosesan pusat yang berfungsi sebagai otak komputer untuk mengolah data dan menjalankan instruksi program."
+            },
+            {
+                no: 2,
+                kd: "Memahami sistem bilangan",
+                indikator: "Menerapkan konversi sistem bilangan",
+                materi: "Sistem Bilangan",
+                level: "C2",
+                soal: "Sistem bilangan yang menggunakan basis 2 disebut?",
+                options: [
+                    "Desimal",
+                    "Oktal",
+                    "Biner",
+                    "Heksadesimal",
+                    "Kuarter"
+                ],
+                kunci: "C",
+                pembahasan: "Sistem bilangan biner menggunakan basis 2 dengan hanya menggunakan digit 0 dan 1 saja. Sistem ini menjadi dasar kerja komputer digital."
+            },
+            {
+                no: 3,
+                kd: "Memahami konsep dasar komputer",
+                indikator: "Mengidentifikasi komponen hardware komputer",
+                materi: "Perangkat Keras Komputer",
+                level: "C1",
+                soal: "Perangkat keras yang berfungsi untuk menyimpan data secara permanen adalah?",
+                options: [
+                    "RAM",
+                    "ROM",
+                    "Hard Disk",
+                    "Cache",
+                    "Register"
+                ],
+                kunci: "C",
+                pembahasan: "Hard Disk adalah perangkat penyimpanan permanen (non-volatile) yang dapat menyimpan data meskipun komputer dimatikan."
+            },
+            {
+                no: 4,
+                kd: "Memahami bahasa pemrograman",
+                indikator: "Mengidentifikasi berbagai bahasa pemrograman",
+                materi: "Bahasa Pemrograman",
+                level: "C1",
+                soal: "Bahasa pemrograman yang dikembangkan oleh Guido van Rossum adalah?",
+                options: [
+                    "Java",
+                    "C++",
+                    "Python",
+                    "JavaScript",
+                    "PHP"
+                ],
+                kunci: "C",
+                pembahasan: "Python adalah bahasa pemrograman tingkat tinggi yang diciptakan oleh Guido van Rossum pada tahun 1991, dikenal dengan syntax yang mudah dipahami."
+            },
+            {
+                no: 5,
+                kd: "Memahami jaringan komputer",
+                indikator: "Menganalisis topologi dan protokol jaringan",
+                materi: "Protokol Jaringan",
+                level: "C2",
+                soal: "Protokol yang digunakan untuk mengirim email adalah?",
+                options: [
+                    "HTTP",
+                    "FTP",
+                    "SMTP",
+                    "TCP",
+                    "UDP"
+                ],
+                kunci: "C",
+                pembahasan: "SMTP (Simple Mail Transfer Protocol) adalah protokol standar yang digunakan untuk mengirimkan email melalui jaringan internet."
+            },
+            {
+                no: 6,
+                kd: "Memahami sistem operasi",
+                indikator: "Menjelaskan fungsi sistem operasi",
+                materi: "Sistem Operasi",
+                level: "C2",
+                soal: "Apa fungsi utama dari sistem operasi?",
+                options: [
+                    "Menjalankan aplikasi",
+                    "Mengelola hardware",
+                    "Menyediakan interface user",
+                    "Semua jawaban benar",
+                    "Tidak ada yang benar"
+                ],
+                kunci: "D",
+                pembahasan: "Sistem operasi memiliki berbagai fungsi utama termasuk menjalankan aplikasi, mengelola hardware, dan menyediakan interface untuk user."
+            },
+            {
+                no: 7,
+                kd: "Memahami jaringan komputer",
+                indikator: "Menganalisis topologi dan protokol jaringan",
+                materi: "Topologi Jaringan",
+                level: "C2",
+                soal: "Topologi jaringan yang berbentuk lingkaran adalah?",
+                options: [
+                    "Bus",
+                    "Star",
+                    "Ring",
+                    "Mesh",
+                    "Tree"
+                ],
+                kunci: "C",
+                pembahasan: "Topologi Ring menghubungkan komputer dalam bentuk lingkaran, dimana data mengalir searah dari satu node ke node berikutnya."
+            },
+            {
+                no: 8,
+                kd: "Memahami struktur data",
+                indikator: "Menerapkan konsep struktur data",
+                materi: "Struktur Data Dasar",
+                level: "C3",
+                soal: "Satuan terkecil dari data dalam komputer adalah?",
+                options: [
+                    "Byte",
+                    "Bit",
+                    "Kilobyte",
+                    "Word",
+                    "Nibble"
+                ],
+                kunci: "B",
+                pembahasan: "Bit (binary digit) adalah satuan terkecil data dalam komputer, dapat bernilai 0 atau 1. 8 bit = 1 byte."
+            },
+            {
+                no: 9,
+                kd: "Memahami perangkat lunak",
+                indikator: "Mengidentifikasi jenis-jenis software",
+                materi: "Software Aplikasi",
+                level: "C1",
+                soal: "Perangkat lunak yang digunakan untuk membuat presentasi adalah?",
+                options: [
+                    "Microsoft Word",
+                    "Microsoft Excel",
+                    "Microsoft PowerPoint",
+                    "Microsoft Access",
+                    "Microsoft Publisher"
+                ],
+                kunci: "C",
+                pembahasan: "Microsoft PowerPoint adalah software aplikasi yang dirancang khusus untuk membuat dan menampilkan presentasi dengan slide."
+            },
+            {
+                no: 10,
+                kd: "Memahami web development",
+                indikator: "Mengidentifikasi teknologi web",
+                materi: "Bahasa Web",
+                level: "C1",
+                soal: "Apa kepanjangan dari HTML?",
+                options: [
+                    "Hyper Text Markup Language",
+                    "High Tech Modern Language",
+                    "Home Tool Markup Language",
+                    "Hyperlink and Text Markup Language",
+                    "Hyper Transfer Markup Language"
+                ],
+                kunci: "A",
+                pembahasan: "HTML adalah singkatan dari Hyper Text Markup Language, yaitu bahasa markup standar untuk membuat halaman web."
+            },
+            {
+                no: 11,
+                kd: "Memahami struktur data",
+                indikator: "Menerapkan konsep struktur data",
+                materi: "Algoritma Pencarian",
+                level: "C3",
+                soal: "Algoritma pencarian yang membagi data menjadi dua bagian adalah?",
+                options: [
+                    "Linear Search",
+                    "Binary Search",
+                    "Sequential Search",
+                    "Hash Search",
+                    "Tree Search"
+                ],
+                kunci: "B",
+                pembahasan: "Binary Search adalah algoritma pencarian yang membagi data menjadi dua bagian secara berulang hingga data ditemukan. Memerlukan data yang sudah terurut."
+            },
+            {
+                no: 12,
+                kd: "Memahami struktur data",
+                indikator: "Menerapkan konsep struktur data",
+                materi: "Stack dan Queue",
+                level: "C3",
+                soal: "Struktur data yang menggunakan prinsip LIFO adalah?",
+                options: [
+                    "Queue",
+                    "Stack",
+                    "Array",
+                    "Linked List",
+                    "Tree"
+                ],
+                kunci: "B",
+                pembahasan: "Stack menggunakan prinsip LIFO (Last In First Out) dimana elemen terakhir yang masuk akan keluar pertama kali."
+            },
+            {
+                no: 13,
+                kd: "Memahami web development",
+                indikator: "Mengidentifikasi teknologi web",
+                materi: "Teknologi Web",
+                level: "C1",
+                soal: "Bahasa markup yang digunakan untuk membuat halaman web adalah?",
+                options: [
+                    "CSS",
+                    "JavaScript",
+                    "HTML",
+                    "PHP",
+                    "SQL"
+                ],
+                kunci: "C",
+                pembahasan: "HTML (Hyper Text Markup Language) adalah bahasa markup standar untuk membuat struktur halaman web."
+            },
+            {
+                no: 14,
+                kd: "Memahami input/output",
+                indikator: "Mengidentifikasi perangkat I/O",
+                materi: "Perangkat Input",
+                level: "C1",
+                soal: "Perangkat input yang digunakan untuk memasukkan suara adalah?",
+                options: [
+                    "Speaker",
+                    "Microphone",
+                    "Headphone",
+                    "Sound Card",
+                    "Amplifier"
+                ],
+                kunci: "B",
+                pembahasan: "Microphone adalah perangkat input yang berfungsi mengubah gelombang suara menjadi sinyal listrik untuk diproses komputer."
+            },
+            {
+                no: 15,
+                kd: "Memahami jaringan komputer",
+                indikator: "Menganalisis topologi dan protokol jaringan",
+                materi: "Jenis Jaringan",
+                level: "C2",
+                soal: "Apa kepanjangan dari LAN?",
+                options: [
+                    "Large Area Network",
+                    "Local Area Network",
+                    "Long Area Network",
+                    "Limited Area Network",
+                    "Linear Area Network"
+                ],
+                kunci: "B",
+                pembahasan: "LAN (Local Area Network) adalah jaringan komputer yang mencakup area geografis terbatas seperti rumah, sekolah, atau gedung kantor."
+            },
+            {
+                no: 16,
+                kd: "Memahami database",
+                indikator: "Mengidentifikasi DBMS",
+                materi: "Database Management System",
+                level: "C1",
+                soal: "Database Management System yang bersifat open source adalah?",
+                options: [
+                    "Oracle",
+                    "Microsoft SQL Server",
+                    "MySQL",
+                    "IBM DB2",
+                    "Microsoft Access"
+                ],
+                kunci: "C",
+                pembahasan: "MySQL adalah DBMS (Database Management System) yang bersifat open source dan banyak digunakan untuk aplikasi web."
+            },
+            {
+                no: 17,
+                kd: "Memahami keamanan komputer",
+                indikator: "Menjelaskan konsep keamanan data",
+                materi: "Enkripsi Data",
+                level: "C2",
+                soal: "Proses mengubah data menjadi bentuk yang tidak dapat dibaca tanpa kunci adalah?",
+                options: [
+                    "Kompilasi",
+                    "Enkripsi",
+                    "Kompresi",
+                    "Konversi",
+                    "Dekripsi"
+                ],
+                kunci: "B",
+                pembahasan: "Enkripsi adalah proses mengamankan data dengan mengubahnya menjadi bentuk terenkripsi yang tidak dapat dibaca tanpa kunci dekripsi."
+            },
+            {
+                no: 18,
+                kd: "Memahami konsep dasar komputer",
+                indikator: "Mengidentifikasi komponen hardware komputer",
+                materi: "Komponen Komputer",
+                level: "C1",
+                soal: "Perangkat keras yang berfungsi sebagai otak komputer adalah?",
+                options: [
+                    "Motherboard",
+                    "RAM",
+                    "Processor",
+                    "Hard Disk",
+                    "Power Supply"
+                ],
+                kunci: "C",
+                pembahasan: "Processor (CPU) adalah otak komputer yang bertugas mengolah data dan menjalankan instruksi program."
+            },
+            {
+                no: 19,
+                kd: "Memahami sistem bilangan",
+                indikator: "Menerapkan konversi sistem bilangan",
+                materi: "Sistem Bilangan",
+                level: "C2",
+                soal: "Sistem bilangan dengan basis 16 disebut?",
+                options: [
+                    "Biner",
+                    "Oktal",
+                    "Desimal",
+                    "Heksadesimal",
+                    "Kuarter"
+                ],
+                kunci: "D",
+                pembahasan: "Sistem bilangan heksadesimal menggunakan basis 16 dengan digit 0-9 dan huruf A-F, sering digunakan dalam pemrograman."
+            },
+            {
+                no: 20,
+                kd: "Memahami perangkat lunak",
+                indikator: "Mengidentifikasi jenis-jenis software",
+                materi: "Software Grafis",
+                level: "C1",
+                soal: "Perangkat lunak yang digunakan untuk mengedit gambar adalah?",
+                options: [
+                    "Microsoft Word",
+                    "Adobe Photoshop",
+                    "Microsoft Excel",
+                    "Notepad",
+                    "Calculator"
+                ],
+                kunci: "B",
+                pembahasan: "Adobe Photoshop adalah software profesional untuk editing dan manipulasi gambar digital."
+            },
+            {
+                no: 21,
+                kd: "Memahami keamanan komputer",
+                indikator: "Menjelaskan konsep keamanan data",
+                materi: "Keamanan Jaringan",
+                level: "C2",
+                soal: "Apa fungsi dari firewall?",
+                options: [
+                    "Mempercepat internet",
+                    "Melindungi jaringan dari ancaman",
+                    "Menyimpan data",
+                    "Menjalankan program",
+                    "Menampilkan gambar"
+                ],
+                kunci: "B",
+                pembahasan: "Firewall berfungsi melindungi jaringan komputer dari akses tidak sah dan ancaman dari luar dengan memonitor dan mengontrol lalu lintas jaringan."
+            },
+            {
+                no: 22,
+                kd: "Memahami bahasa pemrograman",
+                indikator: "Mengidentifikasi berbagai bahasa pemrograman",
+                materi: "Bahasa Pemrograman",
+                level: "C1",
+                soal: "Bahasa pemrograman yang dikembangkan oleh Sun Microsystems adalah?",
+                options: [
+                    "C++",
+                    "Python",
+                    "Java",
+                    "JavaScript",
+                    "C#"
+                ],
+                kunci: "C",
+                pembahasan: "Java adalah bahasa pemrograman berorientasi objek yang dikembangkan oleh Sun Microsystems (sekarang Oracle) pada tahun 1995."
+            },
+            {
+                no: 23,
+                kd: "Memahami input/output",
+                indikator: "Mengidentifikasi perangkat I/O",
+                materi: "Perangkat Output",
+                level: "C1",
+                soal: "Perangkat output yang menghasilkan suara adalah?",
+                options: [
+                    "Monitor",
+                    "Printer",
+                    "Speaker",
+                    "Keyboard",
+                    "Mouse"
+                ],
+                kunci: "C",
+                pembahasan: "Speaker adalah perangkat output yang mengubah sinyal listrik menjadi gelombang suara yang dapat didengar."
+            },
+            {
+                no: 24,
+                kd: "Memahami jaringan internet",
+                indikator: "Menjelaskan protokol internet",
+                materi: "World Wide Web",
+                level: "C2",
+                soal: "Apa kepanjangan dari WWW?",
+                options: [
+                    "World Wide Web",
+                    "World Wide Window",
+                    "World Web Window",
+                    "Wide World Web",
+                    "Web World Wide"
+                ],
+                kunci: "A",
+                pembahasan: "WWW (World Wide Web) adalah sistem informasi global yang dapat diakses melalui internet menggunakan browser."
+            },
+            {
+                no: 25,
+                kd: "Memahami struktur data",
+                indikator: "Menerapkan konsep struktur data",
+                materi: "Queue",
+                level: "C3",
+                soal: "Struktur data yang menggunakan prinsip FIFO adalah?",
+                options: [
+                    "Stack",
+                    "Queue",
+                    "Array",
+                    "Tree",
+                    "Graph"
+                ],
+                kunci: "B",
+                pembahasan: "Queue menggunakan prinsip FIFO (First In First Out) dimana elemen pertama yang masuk akan keluar pertama kali, seperti antrian."
+            },
+            {
+                no: 26,
+                kd: "Memahami memory",
+                indikator: "Membedakan jenis-jenis memory",
+                materi: "Perangkat Memory",
+                level: "C2",
+                soal: "Perangkat keras yang berfungsi untuk menampilkan output visual adalah?",
+                options: [
+                    "Keyboard",
+                    "Mouse",
+                    "Monitor",
+                    "Speaker",
+                    "Microphone"
+                ],
+                kunci: "C",
+                pembahasan: "Monitor adalah perangkat output yang menampilkan informasi visual dari komputer dalam bentuk gambar dan teks."
+            },
+            {
+                no: 27,
+                kd: "Memahami web development",
+                indikator: "Mengidentifikasi teknologi web",
+                materi: "Port USB",
+                level: "C1",
+                soal: "Apa kepanjangan dari USB?",
+                options: [
+                    "Universal Serial Bus",
+                    "Universal System Bus",
+                    "United Serial Bus",
+                    "Universal Standard Bus",
+                    "United System Bus"
+                ],
+                kunci: "A",
+                pembahasan: "USB (Universal Serial Bus) adalah standar koneksi untuk menghubungkan perangkat peripheral ke komputer."
+            },
+            {
+                no: 28,
+                kd: "Memahami bahasa pemrograman",
+                indikator: "Mengidentifikasi berbagai bahasa pemrograman",
+                materi: "CSS",
+                level: "C1",
+                soal: "Bahasa pemrograman yang digunakan untuk styling web adalah?",
+                options: [
+                    "HTML",
+                    "CSS",
+                    "JavaScript",
+                    "PHP",
+                    "SQL"
+                ],
+                kunci: "B",
+                pembahasan: "CSS (Cascading Style Sheets) adalah bahasa stylesheet yang digunakan untuk mengatur tampilan dan layout halaman web."
+            },
+            {
+                no: 29,
+                kd: "Memahami memory",
+                indikator: "Membedakan jenis-jenis memory",
+                materi: "RAM",
+                level: "C2",
+                soal: "Perangkat keras yang berfungsi untuk menyimpan data sementara adalah?",
+                options: [
+                    "Hard Disk",
+                    "CD-ROM",
+                    "RAM",
+                    "Flash Drive",
+                    "DVD"
+                ],
+                kunci: "C",
+                pembahasan: "RAM (Random Access Memory) adalah memory volatile yang menyimpan data sementara saat komputer aktif dan akan hilang saat komputer dimatikan."
+            },
+            {
+                no: 30,
+                kd: "Memahami jaringan internet",
+                indikator: "Menjelaskan protokol internet",
+                materi: "Internet Service Provider",
+                level: "C2",
+                soal: "Apa kepanjangan dari ISP?",
+                options: [
+                    "Internet Service Provider",
+                    "Internet System Provider",
+                    "Internet Security Provider",
+                    "Internet Software Provider",
+                    "Internet Standard Provider"
+                ],
+                kunci: "A",
+                pembahasan: "ISP (Internet Service Provider) adalah perusahaan yang menyediakan layanan akses internet kepada pelanggan."
+            },
+            {
+                no: 31,
+                kd: "Memahami algoritma sorting",
+                indikator: "Menerapkan algoritma pengurutan",
+                materi: "Bubble Sort",
+                level: "C3",
+                soal: "Algoritma pengurutan yang membandingkan elemen bersebelahan adalah?",
+                options: [
+                    "Quick Sort",
+                    "Merge Sort",
+                    "Bubble Sort",
+                    "Selection Sort",
+                    "Insertion Sort"
+                ],
+                kunci: "C",
+                pembahasan: "Bubble Sort adalah algoritma sorting yang bekerja dengan membandingkan dan menukar elemen yang bersebelahan jika urutannya salah."
+            },
+            {
+                no: 32,
+                kd: "Memahami multimedia",
+                indikator: "Mengidentifikasi format file",
+                materi: "Web Browser",
+                level: "C1",
+                soal: "Perangkat lunak yang digunakan untuk browsing internet adalah?",
+                options: [
+                    "Microsoft Word",
+                    "Web Browser",
+                    "Media Player",
+                    "Antivirus",
+                    "Compiler"
+                ],
+                kunci: "B",
+                pembahasan: "Web Browser adalah software untuk mengakses dan menampilkan halaman web di internet, contoh: Chrome, Firefox, Edge."
+            },
+            {
+                no: 33,
+                kd: "Memahami jaringan internet",
+                indikator: "Menjelaskan protokol internet",
+                materi: "DNS",
+                level: "C2",
+                soal: "Apa fungsi dari DNS?",
+                options: [
+                    "Mengamankan jaringan",
+                    "Menerjemahkan domain ke IP address",
+                    "Menyimpan data",
+                    "Menjalankan program",
+                    "Menampilkan web"
+                ],
+                kunci: "B",
+                pembahasan: "DNS (Domain Name System) berfungsi menerjemahkan nama domain yang mudah diingat menjadi IP address numerik."
+            },
+            {
+                no: 34,
+                kd: "Memahami database",
+                indikator: "Mengidentifikasi DBMS",
+                materi: "SQL",
+                level: "C1",
+                soal: "Bahasa pemrograman yang digunakan untuk database adalah?",
+                options: [
+                    "HTML",
+                    "CSS",
+                    "JavaScript",
+                    "SQL",
+                    "PHP"
+                ],
+                kunci: "D",
+                pembahasan: "SQL (Structured Query Language) adalah bahasa standar untuk mengelola dan memanipulasi database relasional."
+            },
+            {
+                no: 35,
+                kd: "Memahami jaringan hardware",
+                indikator: "Mengidentifikasi perangkat jaringan",
+                materi: "Network Card",
+                level: "C1",
+                soal: "Perangkat keras yang menghubungkan komputer ke jaringan adalah?",
+                options: [
+                    "Sound Card",
+                    "Graphics Card",
+                    "Network Card",
+                    "TV Card",
+                    "Capture Card"
+                ],
+                kunci: "C",
+                pembahasan: "Network Card (NIC - Network Interface Card) adalah perangkat keras yang memungkinkan komputer terhubung ke jaringan."
+            },
+            {
+                no: 36,
+                kd: "Memahami user interface",
+                indikator: "Menjelaskan konsep GUI",
+                materi: "GUI",
+                level: "C2",
+                soal: "Apa kepanjangan dari GUI?",
+                options: [
+                    "Graphical User Interface",
+                    "General User Interface",
+                    "Global User Interface",
+                    "Graphic User Integration",
+                    "General User Integration"
+                ],
+                kunci: "A",
+                pembahasan: "GUI (Graphical User Interface) adalah antarmuka pengguna berbasis grafis yang menggunakan ikon, menu, dan mouse untuk interaksi."
+            },
+            {
+                no: 37,
+                kd: "Memahami sistem operasi",
+                indikator: "Menjelaskan fungsi sistem operasi",
+                materi: "Windows OS",
+                level: "C2",
+                soal: "Sistem operasi yang dikembangkan oleh Microsoft adalah?",
+                options: [
+                    "Linux",
+                    "macOS",
+                    "Windows",
+                    "Unix",
+                    "Android"
+                ],
+                kunci: "C",
+                pembahasan: "Windows adalah sistem operasi yang dikembangkan oleh Microsoft Corporation, digunakan secara luas di komputer desktop dan laptop."
+            },
+            {
+                no: 38,
+                kd: "Memahami input/output",
+                indikator: "Mengidentifikasi perangkat I/O",
+                materi: "Mouse",
+                level: "C1",
+                soal: "Perangkat input yang digunakan untuk menunjuk objek di layar adalah?",
+                options: [
+                    "Keyboard",
+                    "Mouse",
+                    "Monitor",
+                    "Speaker",
+                    "Printer"
+                ],
+                kunci: "B",
+                pembahasan: "Mouse adalah perangkat input pointing device yang digunakan untuk menggerakkan kursor dan memilih objek di layar."
+            },
+            {
+                no: 39,
+                kd: "Memahami file format",
+                indikator: "Mengidentifikasi format dokumen",
+                materi: "PDF",
+                level: "C1",
+                soal: "Apa kepanjangan dari PDF?",
+                options: [
+                    "Portable Document Format",
+                    "Personal Document Format",
+                    "Public Document Format",
+                    "Private Document Format",
+                    "Protected Document Format"
+                ],
+                kunci: "A",
+                pembahasan: "PDF (Portable Document Format) adalah format file yang dikembangkan Adobe untuk menampilkan dokumen secara konsisten di berbagai platform."
+            },
+            {
+                no: 40,
+                kd: "Memahami bahasa web",
+                indikator: "Mengidentifikasi bahasa scripting web",
+                materi: "JavaScript",
+                level: "C1",
+                soal: "Bahasa pemrograman yang berjalan di sisi client pada web adalah?",
+                options: [
+                    "PHP",
+                    "Python",
+                    "Java",
+                    "JavaScript",
+                    "C++"
+                ],
+                kunci: "D",
+                pembahasan: "JavaScript adalah bahasa pemrograman yang berjalan di browser (client-side) untuk membuat halaman web interaktif dan dinamis."
+            }
+        ];
+
+        // Data Soal Uraian (5 soal)
+        const soalEssay = [
+            {
+                no: 41,
+                kd: "Menganalisis konsep komputer",
+                indikator: "Membandingkan hardware-software",
+                materi: "Konsep Dasar Komputer",
+                level: "C4",
+                soal: "Jelaskan perbedaan antara hardware dan software dalam sistem komputer! Berikan masing-masing 3 contoh dan jelaskan fungsinya!",
+                rubrik: [
+                    "Skor 4: Menjelaskan perbedaan dengan lengkap, memberikan 3 contoh yang tepat untuk masing-masing beserta fungsi lengkap",
+                    "Skor 3: Menjelaskan perbedaan dengan baik, memberikan 2-3 contoh yang tepat dengan fungsi cukup lengkap",
+                    "Skor 2: Menjelaskan perbedaan secara umum, memberikan 1-2 contoh dengan fungsi kurang lengkap",
+                    "Skor 1: Menjelaskan perbedaan kurang lengkap atau contoh kurang tepat",
+                    "Skor 0: Tidak menjawab atau jawaban salah"
+                ],
+                kunci: "Hardware adalah komponen fisik komputer yang dapat dilihat dan disentuh, sedangkan software adalah program atau instruksi yang menjalankan hardware.\n\nContoh Hardware:\n1. CPU - Processor yang mengolah data dan menjalankan instruksi\n2. RAM - Memory sementara untuk menyimpan data yang sedang diproses\n3. Hard Disk - Penyimpanan permanen untuk data dan program\n\nContoh Software:\n1. Windows - Sistem operasi yang mengelola hardware dan menjalankan program\n2. Microsoft Word - Software aplikasi untuk membuat dokumen\n3. Antivirus - Software utilitas untuk melindungi komputer dari malware"
+            },
+            {
+                no: 42,
+                kd: "Menerapkan algoritma",
+                indikator: "Merancang algoritma sederhana",
+                materi: "Algoritma Pencarian",
+                level: "C3",
+                soal: "Buatlah algoritma dalam bentuk pseudocode untuk mencari nilai terbesar dalam sebuah array yang berisi 10 bilangan! Jelaskan langkah-langkahnya!",
+                rubrik: [
+                    "Skor 4: Algoritma lengkap dan benar dengan pseudocode yang tepat, disertai penjelasan logis",
+                    "Skor 3: Algoritma benar dengan pseudocode yang cukup baik, penjelasan cukup jelas",
+                    "Skor 2: Algoritma cukup benar tetapi pseudocode kurang tepat, penjelasan kurang detail",
+                    "Skor 1: Algoritma kurang lengkap atau pseudocode salah",
+                    "Skor 0: Tidak menjawab atau jawaban salah"
+                ],
+                kunci: "ALGORITMA CARI_NILAI_TERBESAR\nINPUT: array A[1..10]\nOUTPUT: nilai terbesar\n\nBEGIN\n    max ← A[1]\n    FOR i ← 2 TO 10 DO\n        IF A[i] > max THEN\n            max ← A[i]\n        ENDIF\n    ENDFOR\n    OUTPUT max\nEND\n\nPenjelasan:\n1. Inisialisasi variabel max dengan elemen pertama array\n2. Loop dari elemen kedua hingga terakhir\n3. Bandingkan setiap elemen dengan max\n4. Jika lebih besar, update nilai max\n5. Tampilkan nilai max sebagai nilai terbesar"
+            },
+            {
+                no: 43,
+                kd: "Menganalisis jaringan",
+                indikator: "Menjelaskan manfaat jaringan",
+                materi: "Jaringan Komputer",
+                level: "C2",
+                soal: "Jelaskan apa yang dimaksud dengan jaringan komputer! Sebutkan dan jelaskan 4 keuntungan utama menggunakan jaringan komputer dalam lingkungan sekolah atau perkantoran!",
+                rubrik: [
+                    "Skor 4: Menjelaskan definisi dengan tepat dan 4 keuntungan dengan penjelasan lengkap dan relevan",
+                    "Skor 3: Menjelaskan definisi dengan baik dan 3-4 keuntungan dengan penjelasan cukup jelas",
+                    "Skor 2: Menjelaskan definisi cukup dan 2-3 keuntungan dengan penjelasan kurang detail",
+                    "Skor 1: Definisi kurang tepat atau keuntungan kurang dari 2",
+                    "Skor 0: Tidak menjawab atau jawaban salah"
+                ],
+                kunci: "Jaringan komputer adalah sekumpulan komputer yang terhubung satu sama lain untuk berbagi sumber daya, data, dan informasi.\n\nKeuntungan jaringan komputer:\n\n1. Resource Sharing - Berbagi perangkat keras seperti printer, scanner, dan storage sehingga lebih efisien dan hemat biaya\n\n2. Data Sharing - Memudahkan pertukaran data antar pengguna dengan cepat tanpa menggunakan media fisik seperti flashdisk\n\n3. Communication - Memungkinkan komunikasi antar pengguna melalui email, chat, atau video conference untuk kolaborasi lebih baik\n\n4. Centralized Management - Memudahkan administrator dalam mengelola data, keamanan, dan backup secara terpusat"
+            },
+            {
+                no: 44,
+                kd: "Memahami sistem database",
+                indikator: "Menjelaskan komponen database",
+                materi: "Database Management System",
+                level: "C2",
+                soal: "Apa yang dimaksud dengan Database Management System (DBMS)? Jelaskan 4 komponen utama dalam sistem database beserta fungsinya masing-masing!",
+                rubrik: [
+                    "Skor 4: Menjelaskan definisi DBMS dengan tepat dan 4 komponen dengan fungsi lengkap",
+                    "Skor 3: Menjelaskan definisi dengan baik dan 3-4 komponen dengan fungsi cukup jelas",
+                    "Skor 2: Menjelaskan definisi cukup dan 2-3 komponen dengan fungsi kurang detail",
+                    "Skor 1: Definisi kurang tepat atau komponen kurang dari 2",
+                    "Skor 0: Tidak menjawab atau jawaban salah"
+                ],
+                kunci: "Database Management System (DBMS) adalah software yang digunakan untuk membuat, mengelola, dan mengakses database secara efisien dan terorganisir.\n\nKomponen utama database:\n\n1. Hardware - Perangkat fisik seperti server, storage, dan komputer untuk menyimpan dan mengakses database\n\n2. Software - DBMS seperti MySQL, Oracle, atau SQL Server yang mengelola operasi database\n\n3. Data - Kumpulan informasi yang disimpan dalam tabel-tabel yang saling berelasi dengan struktur terorganisir\n\n4. User - Pengguna yang berinteraksi dengan database (administrator, programmer, end user) sesuai hak aksesnya"
+            },
+            {
+                no: 45,
+                kd: "Membandingkan sistem operasi",
+                indikator: "Menganalisis perbedaan OS",
+                materi: "Sistem Operasi",
+                level: "C4",
+                soal: "Bandingkan sistem operasi Windows dan Linux! Jelaskan 3 kelebihan dan 3 kekurangan masing-masing sistem operasi tersebut!",
+                rubrik: [
+                    "Skor 4: Membandingkan dengan lengkap, menyebutkan 3 kelebihan dan 3 kekurangan untuk masing-masing OS dengan penjelasan detail",
+                    "Skor 3: Perbandingan baik, menyebutkan 2-3 kelebihan dan kekurangan dengan penjelasan cukup jelas",
+                    "Skor 2: Perbandingan cukup, menyebutkan 1-2 kelebihan dan kekurangan dengan penjelasan kurang detail",
+                    "Skor 1: Perbandingan kurang lengkap atau penjelasan kurang tepat",
+                    "Skor 0: Tidak menjawab atau jawaban salah"
+                ],
+                kunci: "WINDOWS:\n\nKelebihan:\n1. User-friendly - Interface grafis yang mudah dipahami dan digunakan oleh pemula\n2. Kompatibilitas - Mendukung banyak software dan game komersial\n3. Hardware Support - Driver tersedia untuk hampir semua perangkat keras\n\nKekurangan:\n1. Berbayar - Memerlukan lisensi yang cukup mahal\n2. Rentan Virus - Sering menjadi target malware dan virus\n3. Resource Heavy - Membutuhkan spesifikasi hardware yang tinggi\n\nLINUX:\n\nKelebihan:\n1. Open Source - Gratis dan source code dapat dimodifikasi\n2. Keamanan - Lebih aman dari virus dan malware\n3. Stabil - Jarang crash dan dapat berjalan lama tanpa restart\n\nKekurangan:\n1. Learning Curve - Memerlukan pembelajaran khusus terutama command line\n2. Software Terbatas - Tidak semua software komersial tersedia\n3. Hardware Support - Driver beberapa hardware tidak tersedia atau sulit diinstall"
+            }
+        ];
+
+        // Render functions
+        function renderKisiTable() {
+            const tbody = document.getElementById('kisi-table-body');
+            tbody.innerHTML = '';
+            
+            kisiData.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="text-center">${item.no}</td>
+                    <td>${item.kd}</td>
+                    <td>${item.indikator}</td>
+                    <td>${item.materi}</td>
+                    <td class="text-center"><span class="level-badge level-${item.level.toLowerCase()}">${item.level}</span></td>
+                    <td class="text-center">${item.noSoal}</td>
+                    <td class="text-center">${item.bentuk}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderKartuPG() {
+            const container = document.getElementById('kartu-pg-container');
+            container.innerHTML = '';
+            
+            soalPG.forEach(soal => {
+                const kartu = document.createElement('div');
+                kartu.className = 'a4-page';
+                kartu.innerHTML = `
+                    <div class="card-soal">
+                        <div class="card-header">
+                            KARTU SOAL PILIHAN GANDA NOMOR ${soal.no}
+                        </div>
+                        
+                        <div class="info-grid">
+                            <div class="info-label">Nama Sekolah</div>
+                            <div>: <span class="kartu-school">SMK CENDIKIA RANCAKALONG</span></div>
+                            
+                            <div class="info-label">Mata Pelajaran</div>
+                            <div>: Informatika</div>
+                            
+                            <div class="info-label">Kelas/Semester</div>
+                            <div>: X / 1 (Ganjil)</div>
+                            
+                            <div class="info-label">Kurikulum</div>
+                            <div>: Kurikulum Merdeka</div>
+                        </div>
+                        
+                        <div class="info-grid">
+                            <div class="info-label">Kompetensi Dasar</div>
+                            <div>: ${soal.kd}</div>
+                            
+                            <div class="info-label">Indikator</div>
+                            <div>: ${soal.indikator}</div>
+                            
+                            <div class="info-label">Materi</div>
+                            <div>: ${soal.materi}</div>
+                            
+                            <div class="info-label">Level Kognitif</div>
+                            <div>: <span class="level-badge level-${soal.level.toLowerCase()}">${soal.level}</span></div>
+                        </div>
+                        
+                        <div class="soal-box">
+                            <div style="font-weight: bold; margin-bottom: 12px;">SOAL:</div>
+                            <div>${soal.soal}</div>
+                        </div>
+                        
+                        <div style="margin: 16px 0;">
+                            <div style="font-weight: bold; margin-bottom: 8px;">PILIHAN JAWABAN:</div>
+                            ${soal.options.map((opt, idx) => `
+                                <div class="option-item">
+                                    <strong>${String.fromCharCode(65 + idx)}.</strong> ${opt}
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="kunci-jawaban">
+                            <strong>KUNCI JAWABAN:</strong> ${soal.kunci}
+                        </div>
+                        
+                        <div class="pembahasan-box">
+                            <div style="font-weight: bold; margin-bottom: 8px;">PEMBAHASAN:</div>
+                            <div>${soal.pembahasan}</div>
+                        </div>
+                        
+                        <div class="signature-section">
+                            <div class="signature-box">
+                                <p class="font-bold">Mengetahui,</p>
+                                <p class="font-bold">Kepala Sekolah</p>
+                                <div class="signature-line"></div>
+                                <p class="font-bold kartu-principal"></p>
+                                <p>NIP. ...........................</p>
+                            </div>
+                            <div class="signature-box">
+                                <p>Rancakalong, 03 Desember 2024</p>
+                                <p class="font-bold">Penyusun Soal</p>
+                                <div class="signature-line"></div>
+                                <p class="font-bold kartu-teacher">${config.teacher_name || defaultConfig.teacher_name}</p>
+                                <p>NIP. ...........................</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(kartu);
+            });
+        }
+
+        function renderKartuEssay() {
+            const container = document.getElementById('kartu-essay-container');
+            container.innerHTML = '';
+            
+            soalEssay.forEach(soal => {
+                const kartu = document.createElement('div');
+                kartu.className = 'a4-page';
+                kartu.innerHTML = `
+                    <div class="card-soal">
+                        <div class="card-header">
+                            KARTU SOAL URAIAN NOMOR ${soal.no}
+                        </div>
+                        
+                        <div class="info-grid">
+                            <div class="info-label">Nama Sekolah</div>
+                            <div>: <span class="kartu-school">SMK CENDIKIA RANCAKALONG</span></div>
+                            
+                            <div class="info-label">Mata Pelajaran</div>
+                            <div>: Informatika</div>
+                            
+                            <div class="info-label">Kelas/Semester</div>
+                            <div>: X / 1 (Ganjil)</div>
+                            
+                            <div class="info-label">Kurikulum</div>
+                            <div>: Kurikulum Merdeka</div>
+                        </div>
+                        
+                        <div class="info-grid">
+                            <div class="info-label">Kompetensi Dasar</div>
+                            <div>: ${soal.kd}</div>
+                            
+                            <div class="info-label">Indikator</div>
+                            <div>: ${soal.indikator}</div>
+                            
+                            <div class="info-label">Materi</div>
+                            <div>: ${soal.materi}</div>
+                            
+                            <div class="info-label">Level Kognitif</div>
+                            <div>: <span class="level-badge level-${soal.level.toLowerCase()}">${soal.level}</span></div>
+                        </div>
+                        
+                        <div class="soal-box">
+                            <div style="font-weight: bold; margin-bottom: 12px;">SOAL:</div>
+                            <div>${soal.soal}</div>
+                        </div>
+                        
+                        <div style="margin: 16px 0; border: 2px solid #e5e7eb; padding: 16px; background: #f9fafb;">
+                            <div style="font-weight: bold; margin-bottom: 8px; color: #7c3aed;">RUBRIK PENILAIAN:</div>
+                            ${soal.rubrik.map(r => `<div style="margin: 4px 0;">• ${r}</div>`).join('')}
+                        </div>
+                        
+                        <div class="kunci-jawaban" style="white-space: pre-line;">
+                            <div style="font-weight: bold; margin-bottom: 8px;">KUNCI JAWABAN:</div>
+                            <div style="font-weight: normal;">${soal.kunci}</div>
+                        </div>
+                        
+                        <div class="signature-section">
+                            <div class="signature-box">
+                                <p class="font-bold">Mengetahui,</p>
+                                <p class="font-bold">Kepala Sekolah</p>
+                                <div class="signature-line"></div>
+                                <p class="font-bold kartu-principal"></p>
+                                <p>NIP. ...........................</p>
+                            </div>
+                            <div class="signature-box">
+                                <p>Rancakalong, 03 Desember 2024</p>
+                                <p class="font-bold">Penyusun Soal</p>
+                                <div class="signature-line"></div>
+                                <p class="font-bold kartu-teacher">${config.teacher_name || defaultConfig.teacher_name}</p>
+                                <p>NIP. ...........................</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(kartu);
+            });
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            // Hide all sections
+            document.getElementById('kisi-kisi-section').style.display = 'none';
+            document.getElementById('kartu-pg-section').style.display = 'none';
+            document.getElementById('kartu-essay-section').style.display = 'none';
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            if (tab === 'kisi-kisi') {
+                document.getElementById('kisi-kisi-section').style.display = 'block';
+                document.querySelectorAll('.tab-button')[0].classList.add('active');
+            } else if (tab === 'kartu-pg') {
+                document.getElementById('kartu-pg-section').style.display = 'block';
+                document.querySelectorAll('.tab-button')[1].classList.add('active');
+            } else if (tab === 'kartu-essay') {
+                document.getElementById('kartu-essay-section').style.display = 'block';
+                document.querySelectorAll('.tab-button')[2].classList.add('active');
+            }
+        }
+
+        // Element SDK Implementation
+        async function onConfigChange(newConfig) {
+            config = { ...config, ...newConfig };
+            
+            // Update kisi-kisi section
+            document.getElementById('school-kisi').textContent = config.school_name || defaultConfig.school_name;
+            document.getElementById('teacher-kisi').textContent = config.teacher_name || defaultConfig.teacher_name;
+            document.getElementById('teacher-sign-kisi').textContent = config.teacher_name || defaultConfig.teacher_name;
+            
+            // Update all kartu soal
+            document.querySelectorAll('.kartu-school').forEach(el => {
+                el.textContent = config.school_name || defaultConfig.school_name;
+            });
+            document.querySelectorAll('.kartu-teacher').forEach(el => {
+                el.textContent = config.teacher_name || defaultConfig.teacher_name;
+            });
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [],
+                borderables: [],
+                fontEditable: undefined,
+                fontSizeable: undefined
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["school_name", config.school_name || defaultConfig.school_name],
+                ["teacher_name", config.teacher_name || defaultConfig.teacher_name]
+            ]);
+        }
+
+        // Initialize
+        async function init() {
+            if (window.elementSdk) {
+                await window.elementSdk.init({
+                    defaultConfig,
+                    onConfigChange,
+                    mapToCapabilities,
+                    mapToEditPanelValues
+                });
+            }
+            
+            renderKisiTable();
+            renderKartuPG();
+            renderKartuEssay();
+        }
+
+        // Print function
+        function handlePrint() {
+            window.print();
+        }
+
+        // Make functions available globally
+        window.switchTab = switchTab;
+        window.handlePrint = handlePrint;
+        
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a83073ed1ad3df4',t:'MTc2NDc2NDUzMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
